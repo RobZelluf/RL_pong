@@ -11,6 +11,10 @@ import argparse
 import wimblepong
 from PIL import Image
 from superawesomeagent.superawesomeagent import *
+from utils import *
+
+import warnings
+warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
@@ -35,14 +39,27 @@ player = SAA(env, player_id)
 env.set_names(player.get_name(), opponent.get_name())
 
 win1 = 0
-for i in range(0,episodes):
+cumulative_rewards = [0]
+for i in range(0, episodes):
     done = False
+    state, _ = env.reset()
+    state = np.transpose(state)
+
+    state_diff = state - state
     while not done:
         # Get the actions from both SimpleAIs
-        action1 = player.get_action()
+        action1 = player.get_action(state)
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
-        (ob1, ob2), (rew1, rew2), done, info = env.step((action1, action2))
+        (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
+        if not i % 10 == 0:
+            next_state = np.transpose(next_state)
+            next_state_diff = next_state - state
+
+            player.store_transition(state_diff, action1, next_state_diff, rew1, done)
+            player.update_network()
+            state_diff = next_state_diff
+
         #img = Image.fromarray(ob1)
         #img.save("ob1.png")
         #img = Image.fromarray(ob2)
@@ -50,8 +67,11 @@ for i in range(0,episodes):
         # Count the wins
         if rew1 == 10:
             win1 += 1
-        if not args.headless:
+        if i % 10 == 0:
             env.render()
         if done:
             observation= env.reset()
             print("episode {} over. Broken WR: {:.3f}".format(i, win1/(i+1)))
+
+    cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * win1)
+    plot_rewards(cumulative_rewards)
