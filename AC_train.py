@@ -79,9 +79,6 @@ for i in range(start_episode, episodes):
         # Store action's outcome (so that the agent can improve its policy)
         player.store_outcome(previous_state_diff, action_probabilities, action1, rew1, state_value)
 
-        if i % 50 == 0:
-            env.render()
-
         if rew1 == 10:
             win1 += 1
             won = 1
