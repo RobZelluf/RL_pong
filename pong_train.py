@@ -94,5 +94,5 @@ for i in range(start_episode, episodes):
         print("Models saved!")
         torch.save(player.policy_net, "models/policy_net.pth")
         torch.save(player.target_net, "models/target_net.pth")
-        with open("models/model_info.p", "wb") as f:
-            pickle.dump(i, f)
+        # with open("models/model_info.p", "wb") as f:
+        #     pickle.dump(i, f)
