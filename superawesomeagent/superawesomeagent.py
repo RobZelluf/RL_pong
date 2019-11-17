@@ -14,9 +14,9 @@ class Q_CNN(nn.Module):
         self.state_space = state_space
         self.action_space = action_space
 
-        self.conv1 = nn.Conv2d(1, 5, 1, 1)
-        self.pool = torch.nn.MaxPool2d(kernel_size=1, stride=1)
-        self.fc1 = torch.nn.Linear(200 * 200 * 5, 64)
+        self.conv1 = nn.Conv2d(1, 2, 1, 1)
+        self.pool = torch.nn.MaxPool2d(kernel_size=4, stride=4)
+        self.fc1 = torch.nn.Linear(50 * 50 * 2, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
@@ -30,7 +30,7 @@ class Q_CNN(nn.Module):
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 200 * 200 * 5)
+        x = x.view(-1, 50 * 50 * 2)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
@@ -43,7 +43,7 @@ class Q_CNN(nn.Module):
 
 
 class SAA(object):
-    def __init__(self, env, player_id=1, load=False, replay_buffer_size=10000, batch_size=320, gamma=0.98):
+    def __init__(self, env, player_id=1, load=False, replay_buffer_size=500, batch_size=500, gamma=0.98):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
