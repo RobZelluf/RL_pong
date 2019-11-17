@@ -28,7 +28,7 @@ class Policy(nn.Module):
         self.fc2_mean = torch.nn.Linear(64, action_space)
         self.fc2_value = torch.nn.Linear(64, 1)
 
-        self.sigma0 = self.sigma = 1
+        self.sigma0 = self.sigma = 2
         self.init_weights()
 
     def init_weights(self):
