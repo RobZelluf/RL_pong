@@ -16,7 +16,7 @@ class Q_CNN(nn.Module):
 
         self.conv1 = nn.Conv2d(1, 5, 1, 1)
         self.pool = torch.nn.MaxPool2d(kernel_size=1, stride=1)
-        self.fc1 = torch.nn.Linear(200 * 200 * 3, 64)
+        self.fc1 = torch.nn.Linear(200 * 200 * 5, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
