@@ -135,7 +135,6 @@ class SAA(object):
     def update_target_network(self):
         self.target_net.load_state_dict(self.policy_net.state_dict())
 
-
     def store_transition(self, state, action, next_state, reward, done):
         action = torch.Tensor([[action]]).long()
         reward = torch.tensor([reward], dtype=torch.float32)

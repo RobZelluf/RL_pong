@@ -52,6 +52,7 @@ env.set_names(player.get_name(), opponent.get_name())
 
 win1 = 0
 cumulative_rewards = [0]
+RA_actions = [0]
 for i in range(start_episode, episodes):
     done = False
     eps = glie_a / (glie_a + i)
@@ -60,7 +61,10 @@ for i in range(start_episode, episodes):
     state = np.transpose(state)
     state_diff = state - state
     point = 0
+
+    actions = 0
     while not done:
+        actions += 1
         # Get the actions from both SimpleAIs
         action1 = player.get_action(state, eps)
         action2 = opponent.get_action()
@@ -90,7 +94,9 @@ for i in range(start_episode, episodes):
             print("Epsilon:", eps)
 
     cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
+    RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
     print("Last average reward:", cumulative_rewards[-1])
+    print("Running average actions", RA_actions[-1])
     if not args.headless:
         plot_rewards(cumulative_rewards)
 
