@@ -19,8 +19,8 @@ warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
-parser.add_argument("--fps", type=int, help="FPS for rendering", default=2000)
-parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=30)
+parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
+parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=500)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
 parser.add_argument("--load", action="store_true")
 args = parser.parse_args()
@@ -70,13 +70,13 @@ for i in range(start_episode, episodes):
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
-        if not i % 10 == 0:
-            next_state = np.transpose(next_state)
-            next_state_diff = next_state - state
 
-            player.store_transition(state_diff, action1, next_state_diff, rew1, done)
-            player.update_network()
-            state_diff = next_state_diff
+        next_state = np.transpose(next_state)
+        next_state_diff = next_state - state
+
+        player.store_transition(state_diff, action1, next_state_diff, rew1, done)
+        player.update_network()
+        state_diff = next_state_diff
 
         #img = Image.fromarray(ob1)
         #img.save("ob1.png")
