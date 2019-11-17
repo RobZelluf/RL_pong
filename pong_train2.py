@@ -59,7 +59,7 @@ for i in range(start_episode, episodes):
     eps = glie_a / (glie_a + i)
 
     state, _ = env.reset()
-    state = np.transpose(state)
+    state = process_state(state)
     state_diff = state - state
     point = 0
 
@@ -72,7 +72,7 @@ for i in range(start_episode, episodes):
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state = np.transpose(next_state)
+        next_state = process_state(next_state)
         next_state_diff = next_state - state
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
@@ -89,8 +89,7 @@ for i in range(start_episode, episodes):
         if rew1 == 10:
             win1 += 1
             point = 1
-        if i % 10 == 0 and not args.headless:
-            env.render()
+
         if done:
             player.update_network()
             observation = env.reset()

@@ -14,9 +14,9 @@ class Q_CNN(nn.Module):
         self.state_space = state_space
         self.action_space = action_space
 
-        self.conv1 = nn.Conv2d(3, 12, 3, 1)
-        self.pool = torch.nn.MaxPool2d(kernel_size=3, stride=1)
-        self.fc1 = torch.nn.Linear(196 * 196 * 12, 64)
+        self.conv1 = nn.Conv2d(1, 3, 1, 1)
+        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = torch.nn.Linear(100 * 100 * 3, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
@@ -30,7 +30,7 @@ class Q_CNN(nn.Module):
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 196 * 196 * 12)
+        x = x.view(-1, 100 * 100 * 3)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
@@ -39,11 +39,11 @@ class Q_CNN(nn.Module):
         # Computes the second fully connected layer (activation applied later)
         # Size changes from (1, 64) to (1, 10)
         x = F.softmax(self.fc2(x))
-        return (x)
+        return x
 
 
 class SAA(object):
-    def __init__(self, env, load=False, player_id=1, replay_buffer_size=10000, batch_size=320, gamma=0.98):
+    def __init__(self, env, player_id=1, load=False, replay_buffer_size=10000, batch_size=320, gamma=0.98):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
@@ -69,6 +69,7 @@ class SAA(object):
             self.target_net = Q_CNN(self.state_space, self.action_space)
             self.target_net.load_state_dict(self.policy_net.state_dict())
             self.target_net.eval()
+
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=1e-3)
 
     def update_network(self, updates=1):
@@ -129,7 +130,7 @@ class SAA(object):
         sample = random.random()
         if sample > epsilon:
             with torch.no_grad():
-                state = state.reshape(1, 3, 200, 200)
+                state = state.reshape(1, 1, 200, 200)
                 state = torch.from_numpy(state).float()
                 q_values = self.policy_net(state)
                 return torch.argmax(q_values).item()

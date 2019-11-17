@@ -63,3 +63,12 @@ class DQN(nn.Module):
         x = self.fc2(x)
         return x
 
+
+def process_state(state):
+    mask = np.all(state == [43, 48, 58], axis=-1)
+    state[mask] = [0, 0, 0]
+    state = np.mean(state, axis=-1)
+    state = np.transpose(state)
+    state = state.reshape((1, 200, 200))
+    return state
+
