@@ -12,6 +12,7 @@ import wimblepong
 from PIL import Image
 from superawesomeagent.superawesomeagent import *
 from utils import *
+import pickle
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -91,3 +92,5 @@ for i in range(0, episodes):
         print("Models saved!")
         torch.save(player.policy_net, "models/policy_net.pth")
         torch.save(player.target_net, "models/target_net.pth")
+        with open("model_info.p", "wb") as f:
+            pickle.dump(i, f)
