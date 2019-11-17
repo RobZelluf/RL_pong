@@ -69,6 +69,8 @@ for i in range(start_episode, episodes):
 
         # Perform the action on the environment, get new state and reward
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
+        if rew1 == 0:
+            rew1 = 0.01
 
         next_state = process_state(next_state)
         state_diff = next_state - state
