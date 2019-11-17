@@ -90,7 +90,7 @@ for i in range(start_episode, episodes):
     print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1 / (i + 1), cumulative_rewards[-1],
                                                                               RA_actions[-1]))
 
-    if i % 50 == 0 and args.save:
+    if i % 500 == 0 and args.save:
         torch.save(policy, "models/AC/policy_net.pth")
         with open("models/AC/model_info.p", "wb") as f:
             pickle.dump(i, f)
