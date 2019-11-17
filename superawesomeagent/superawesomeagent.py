@@ -43,7 +43,7 @@ class Q_CNN(nn.Module):
 
 
 class SAA(object):
-    def __init__(self, env, player_id=1, replay_buffer_size=50000, batch_size=32, gamma=0.98):
+    def __init__(self, env, load=False, player_id=1, replay_buffer_size=50000, batch_size=32, gamma=0.98):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
@@ -61,10 +61,14 @@ class SAA(object):
         self.memory = ReplayMemory(replay_buffer_size)
         self.batch_size = batch_size
 
-        self.policy_net = Q_CNN(self.state_space, self.action_space)
-        self.target_net = Q_CNN(self.state_space, self.action_space)
-        self.target_net.load_state_dict(self.policy_net.state_dict())
-        self.target_net.eval()
+        if load:
+            self.target_net = torch.load("models/target_net.pth")
+            self.policy_net = torch.load("models/policy_net.pth")
+        else:
+            self.policy_net = Q_CNN(self.state_space, self.action_space)
+            self.target_net = Q_CNN(self.state_space, self.action_space)
+            self.target_net.load_state_dict(self.policy_net.state_dict())
+            self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=1e-3)
 
     def update_network(self, updates=1):
