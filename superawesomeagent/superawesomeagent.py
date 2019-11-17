@@ -54,7 +54,7 @@ class SAA(object):
 
         if torch.cuda.is_available():
             print("Using GPU!")
-            torch.cuda.set_device(1)
+            torch.cuda.set_device(0)
 
         self.state_space = env.observation_space
         self.action_space = env.action_space.n
