@@ -79,6 +79,9 @@ for i in range(start_episode, episodes):
         # Store action's outcome (so that the agent can improve its policy)
         player.store_outcome(previous_state_diff, action_probabilities, action1, rew1, state_value)
 
+        if i % 50 == 0:
+            env.render()
+
         if rew1 == 10:
             win1 += 1
             won = 1
@@ -89,3 +92,10 @@ for i in range(start_episode, episodes):
     RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
     print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1 / (i + 1), cumulative_rewards[-1],
                                                                               RA_actions[-1]))
+
+    if i % 50 == 0 and args.save:
+        torch.save(policy, "models/AC/policy_net.pth")
+        with open("models/AC/model_info.p", "wb") as f:
+            pickle.dump(i, f)
+
+        print("Models saved!")
