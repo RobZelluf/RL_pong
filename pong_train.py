@@ -90,7 +90,7 @@ for i in range(start_episode, episodes):
             env.render()
         if done:
             observation= env.reset()
-            print("episode {} over. Broken WR: {:.3f}".format(i, win1/(i+1)))
+            print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1]))
             print("Epsilon:", eps)
 
     cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
