@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
+parser.add_argument("--load", action="store_true")
 args = parser.parse_args()
 
 # Make the environment
@@ -34,6 +35,10 @@ player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
 player = SAA(env, player_id)
+
+if args.load:
+    player.target_net = torch.load("models/target_net.pth")
+    player.policy_net = torch.load("models/policy_net.pth")
 
 glie_a = 2000
 
@@ -84,5 +89,5 @@ for i in range(0, episodes):
 
     if i % 10 == 0:
         print("Models saved!")
-        torch.save(player.policy_net.state_dict(), "models/policy_net.pth")
-        torch.save(player.target_net.state_dict(), "models/target_net.pth")
+        torch.save(player.policy_net, "models/policy_net.pth")
+        torch.save(player.target_net, "models/target_net.pth")
