@@ -67,11 +67,13 @@ for i in range(0, episodes):
         # Count the wins
         if rew1 == 10:
             win1 += 1
-        if i % 10 == 0:
+        if i % 10 == 0 and not args.headless:
             env.render()
         if done:
             observation= env.reset()
             print("episode {} over. Broken WR: {:.3f}".format(i, win1/(i+1)))
 
     cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * win1)
-    plot_rewards(cumulative_rewards)
+    print("Last average reward:", cumulative_rewards[-1])
+    if not args.headless:
+        plot_rewards(cumulative_rewards)

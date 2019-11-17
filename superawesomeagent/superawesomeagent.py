@@ -52,6 +52,10 @@ class SAA(object):
         self.name = "SAA"
         self.gamma = gamma
 
+        if torch.cuda.is_available():
+            print("Using GPU!")
+            torch.cuda.set_device(1)
+
         self.state_space = env.observation_space
         self.action_space = env.action_space.n
         self.memory = ReplayMemory(replay_buffer_size)
