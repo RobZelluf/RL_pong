@@ -41,8 +41,7 @@ start_episode = 0
 if args.load:
     player.target_net = torch.load("models/target_net.pth")
     player.policy_net = torch.load("models/policy_net.pth")
-    with open("models/model_info.p", "rb") as f:
-        start_episode = 200
+    start_episode = 200
 
 glie_a = 2000
 
