@@ -76,6 +76,7 @@ for i in range(start_episode, episodes):
         next_state_diff = next_state - state
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
+
         state_diff = next_state_diff
         state = next_state
 
@@ -84,6 +85,7 @@ for i in range(start_episode, episodes):
         #img = Image.fromarray(ob2)
         #img.save("ob2.png")
         # Count the wins
+
         if rew1 == 10:
             win1 += 1
             point = 1
@@ -91,7 +93,7 @@ for i in range(start_episode, episodes):
             env.render()
         if done:
             player.update_network()
-            observation= env.reset()
+            observation = env.reset()
             cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
             print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1]))
