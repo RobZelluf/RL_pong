@@ -87,8 +87,8 @@ for i in range(start_episode, episodes):
 
     cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * won)
     RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
-    print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1 / (i + 1), cumulative_rewards[-1],
-                                                                              RA_actions[-1]))
+    print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}. Sigma: {:.3f}".format(i, win1 / (i + 1), cumulative_rewards[-1],
+                                                                              RA_actions[-1], player.policy.sigma))
 
     if i % 500 == 0 and args.save:
         torch.save(policy, "models/AC/policy_net.pth")
