@@ -99,9 +99,10 @@ for i in range(start_episode, episodes):
     if not args.headless:
         plot_rewards(cumulative_rewards)
 
-    if i % 10 == 0 and args.save:
-        print("Models saved!")
+    if i % 100 == 0 and args.save:
         torch.save(player.policy_net, "models/policy_net.pth")
         torch.save(player.target_net, "models/target_net.pth")
         with open("models/model_info.p", "wb") as f:
             pickle.dump(i, f)
+
+        print("Models saved!")
