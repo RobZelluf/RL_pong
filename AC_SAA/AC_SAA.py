@@ -28,7 +28,7 @@ class Policy(nn.Module):
         self.fc2_mean = torch.nn.Linear(64, action_space)
         self.fc2_value = torch.nn.Linear(64, 1)
 
-        self.sigma = torch.nn.Parameter(torch.ones(1) * 10)
+        self.sigma = 10
         self.init_weights()
 
     def init_weights(self):
@@ -37,7 +37,7 @@ class Policy(nn.Module):
                 torch.nn.init.normal_(m.weight)
                 torch.nn.init.zeros_(m.bias)
 
-    def forward(self, x):
+    def forward(self, x, k):
         # Computes the activation of the first convolution
         # Size changes from (3, 32, 32) to (18, 32, 32)
         x = F.relu(self.conv1(x))
@@ -58,7 +58,7 @@ class Policy(nn.Module):
         # Size changes from (1, 64) to (1, 10)
 
         mu = self.fc2_mean(x)
-        sigma = self.sigma
+        sigma = np.sqrt(self.sigma * np.exp(-0.0005 * k))
 
         dist = torch.distributions.Normal(mu, sigma)
         state_value = self.fc2_value(x)[0]
@@ -86,8 +86,10 @@ class SAA(object):
         self.action_probs = []
         self.rewards = []
         self.value_estimates = []
+        self.episode_number = 0
 
     def episode_finished(self, episode_number):
+        self.episode_number = episode_number
         action_probs = torch.stack(self.action_probs, dim=0) \
                 .to(self.train_device).squeeze(-1)
         rewards = torch.stack(self.rewards, dim=0).to(self.train_device).squeeze(-1)
@@ -128,7 +130,7 @@ class SAA(object):
         x = x.reshape(1, 1, 200, 200)
 
         # TODO: Pass state x through the policy network (T1)
-        dist, state_value = self.policy.forward(x)
+        dist, state_value = self.policy.forward(x, self.episode_number)
 
         # TODO: Return mean if evaluation, else sample from the distribution
         # returned by the policy (T1)
