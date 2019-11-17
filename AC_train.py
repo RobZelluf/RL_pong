@@ -54,7 +54,7 @@ RA_actions = [0]
 for i in range(start_episode, episodes):
     state, _ = env.reset()
     state = process_state(state)
-    state_diff = state - state
+    state_diff = 2 * state - state
 
     done = False
 
@@ -73,7 +73,7 @@ for i in range(start_episode, episodes):
             rew1 = 0.01
 
         next_state = process_state(next_state)
-        state_diff = next_state - state
+        state_diff = 2 * next_state - state
         state = next_state
 
         # Store action's outcome (so that the agent can improve its policy)

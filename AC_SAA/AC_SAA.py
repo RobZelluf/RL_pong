@@ -23,8 +23,8 @@ class Policy(nn.Module):
         self.action_space = action_space
 
         self.conv1 = nn.Conv2d(1, 2, 1, 1)
-        self.pool = torch.nn.MaxPool2d(kernel_size=4, stride=4)
-        self.fc1 = torch.nn.Linear(50 * 50 * 2, 64)
+        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = torch.nn.Linear(100 * 100 * 2, 64)
         self.fc2_mean = torch.nn.Linear(64, action_space)
         self.fc2_value = torch.nn.Linear(64, 1)
 
@@ -48,7 +48,7 @@ class Policy(nn.Module):
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 50 * 50 * 2)
+        x = x.view(-1, 100 * 100 * 2)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
@@ -58,7 +58,7 @@ class Policy(nn.Module):
         # Size changes from (1, 64) to (1, 10)
 
         mu = self.fc2_mean(x)
-        self.sigma = np.sqrt(self.sigma0 * np.exp(-0.0005 * k))
+        self.sigma = np.sqrt(self.sigma0 * np.exp(-0.00005 * k))
 
         dist = torch.distributions.Normal(mu, self.sigma)
         state_value = self.fc2_value(x)[0]
