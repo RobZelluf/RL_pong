@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
+parser.add_argument("--save", action="store_true")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
 parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=500)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
@@ -98,7 +99,7 @@ for i in range(start_episode, episodes):
     if not args.headless:
         plot_rewards(cumulative_rewards)
 
-    if i % 10 == 0:
+    if i % 10 == 0 and args.save:
         print("Models saved!")
         torch.save(player.policy_net, "models/policy_net.pth")
         torch.save(player.target_net, "models/target_net.pth")
