@@ -36,10 +36,13 @@ player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
 player = SAA(env, player_id)
+start_episode = 0
 
 if args.load:
     player.target_net = torch.load("models/target_net.pth")
     player.policy_net = torch.load("models/policy_net.pth")
+    with open("models/model_info.p", "rb") as f:
+        start_episode = pickle.load(f)
 
 glie_a = 2000
 
@@ -48,7 +51,7 @@ env.set_names(player.get_name(), opponent.get_name())
 
 win1 = 0
 cumulative_rewards = [0]
-for i in range(0, episodes):
+for i in range(start_episode, episodes):
     done = False
     eps = glie_a / (glie_a + i)
 
@@ -92,5 +95,5 @@ for i in range(0, episodes):
         print("Models saved!")
         torch.save(player.policy_net, "models/policy_net.pth")
         torch.save(player.target_net, "models/target_net.pth")
-        with open("model_info.p", "wb") as f:
+        with open("models/model_info.p", "wb") as f:
             pickle.dump(i, f)
