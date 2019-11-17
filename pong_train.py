@@ -81,3 +81,8 @@ for i in range(0, episodes):
     print("Last average reward:", cumulative_rewards[-1])
     if not args.headless:
         plot_rewards(cumulative_rewards)
+
+    if i % 10 == 0:
+        print("Models saved!")
+        torch.save(player.policy_net.state_dict(), "models/policy_net.pth")
+        torch.save(player.target_net.state_dict(), "models/target_net.pth")
