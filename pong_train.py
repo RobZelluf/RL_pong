@@ -35,6 +35,8 @@ opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
 player = SAA(env, player_id)
 
+glie_a = 2000
+
 # Set the names for both SimpleAIs
 env.set_names(player.get_name(), opponent.get_name())
 
@@ -42,13 +44,14 @@ win1 = 0
 cumulative_rewards = [0]
 for i in range(0, episodes):
     done = False
+    eps = glie_a / (glie_a + i)
+
     state, _ = env.reset()
     state = np.transpose(state)
-
     state_diff = state - state
     while not done:
         # Get the actions from both SimpleAIs
-        action1 = player.get_action(state)
+        action1 = player.get_action(state, eps)
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
@@ -72,6 +75,7 @@ for i in range(0, episodes):
         if done:
             observation= env.reset()
             print("episode {} over. Broken WR: {:.3f}".format(i, win1/(i+1)))
+            print("Epsilon:", eps)
 
     cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * win1)
     print("Last average reward:", cumulative_rewards[-1])
