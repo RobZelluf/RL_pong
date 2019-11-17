@@ -77,6 +77,7 @@ for i in range(start_episode, episodes):
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
         state_diff = next_state_diff
+        state = next_state
 
         #img = Image.fromarray(ob1)
         #img.save("ob1.png")
