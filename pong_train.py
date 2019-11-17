@@ -66,7 +66,7 @@ for i in range(start_episode, episodes):
     while not done:
         actions += 1
         # Get the actions from both SimpleAIs
-        action1 = player.get_action(state, eps)
+        action1 = player.get_action(state_diff, eps)
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
@@ -95,8 +95,8 @@ for i in range(start_episode, episodes):
 
     cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
     RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
-    print("Last average reward:", cumulative_rewards[-1])
-    print("Running average actions", RA_actions[-1])
+    print("Last average reward:", round(cumulative_rewards[-1], 2))
+    print("Running average actions", round(RA_actions[-1], 2))
     if not args.headless:
         plot_rewards(cumulative_rewards)
 
