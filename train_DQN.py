@@ -10,7 +10,7 @@ import numpy as np
 import argparse
 import wimblepong
 from PIL import Image
-from superawesomeagent.superawesomeagent import *
+from DQN_SAA.DQN_SAA import *
 from utils import *
 import pickle
 
@@ -37,13 +37,13 @@ episodes = 100000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = SAA(env, player_id)
+player = DQN_SAA(env, player_id)
 start_episode = 0
 
 if args.load:
-    player.target_net = torch.load("models/target_net.pth")
-    player.policy_net = torch.load("models/policy_net.pth")
-    with open("models/model_info.p", "rb") as f:
+    player.target_net = torch.load("DQN_SAA/target_net.pth")
+    player.policy_net = torch.load("DQN_SAA/policy_net.pth")
+    with open("DQN_SAA/model_info.p", "rb") as f:
         start_episode = pickle.load(f)
 
 glie_a = args.glie_a
@@ -98,13 +98,11 @@ for i in range(start_episode, episodes):
             print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1]))
             print("Epsilon: {:.3f}".format(eps))
 
-    if not args.headless:
-        plot_rewards(cumulative_rewards)
 
     if i % 100 == 0 and args.save:
-        torch.save(player.policy_net, "models/policy_net.pth")
-        torch.save(player.target_net, "models/target_net.pth")
-        with open("models/model_info.p", "wb") as f:
+        torch.save(player.policy_net, "DQN_SAA/policy_net.pth")
+        torch.save(player.target_net, "DQN_SAA/target_net.pth")
+        with open("DQN_SAA/model_info.p", "wb") as f:
             pickle.dump(i, f)
 
         print("Models saved!")

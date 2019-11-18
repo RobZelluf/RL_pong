@@ -10,7 +10,7 @@ import numpy as np
 import argparse
 import wimblepong
 from PIL import Image
-from superawesomeagent.superawesomeagent import *
+from DQN_SAA.DQN_SAA import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
@@ -29,7 +29,7 @@ episodes = 100000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = SAA(env, player_id, True)
+player = DQN_SAA(env, player_id, True)
 
 # Set the names for both SimpleAIs
 env.set_names(player.get_name(), opponent.get_name())

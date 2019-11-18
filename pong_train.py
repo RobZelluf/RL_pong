@@ -10,7 +10,7 @@ import numpy as np
 import argparse
 import wimblepong
 from PIL import Image
-from superawesomeagent.superawesomeagent import *
+from DQN_SAA.DQN_SAA import *
 from utils import *
 import pickle
 
@@ -36,7 +36,7 @@ episodes = 100000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = SAA(env, player_id)
+player = DQN_SAA(env, player_id)
 start_episode = 0
 
 if args.load:

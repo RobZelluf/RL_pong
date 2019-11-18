@@ -68,6 +68,6 @@ def process_state(state):
     mask = np.all(state == [43, 48, 58], axis=-1)
     state[mask] = [0, 0, 0]
     state = np.mean(state, axis=-1)
-    state = state.reshape((1, 200, 200))
+    state = state.reshape(200 * 200)
     return state
 

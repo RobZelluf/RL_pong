@@ -65,7 +65,7 @@ class Policy(nn.Module):
         return dist, state_value
 
 
-class SAA(object):
+class AC_SAA(object):
     def __init__(self, env, policy, player_id=1, load=False, replay_buffer_size=500, batch_size=500, gamma=0.98):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
@@ -150,7 +150,6 @@ class SAA(object):
         act_log_prob = dist.log_prob(action)
 
         # TODO: Return state value prediction, and/or save it somewhere (T3)
-
         return action, act_log_prob, state_value
 
     def store_outcome(self, observation, action_prob, action_taken, reward, value_est):

@@ -42,7 +42,7 @@ class Q_CNN(nn.Module):
         return x
 
 
-class SAA(object):
+class DQN_SAA(object):
     def __init__(self, env, player_id=1, load=False, replay_buffer_size=500, batch_size=500, gamma=0.98):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
