@@ -60,7 +60,7 @@ for i in range(start_episode, episodes):
 
     state, _ = env.reset()
     state = process_state(state)
-    state_diff = state - state
+    state_diff = 2 * state - state
     point = 0
 
     actions = 0
@@ -73,7 +73,7 @@ for i in range(start_episode, episodes):
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
 
         next_state = process_state(next_state)
-        next_state_diff = next_state - state
+        next_state_diff = 2 * next_state - state
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
 
