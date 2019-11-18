@@ -6,10 +6,8 @@ import matplotlib.pyplot as plt
 from random import randint
 import pickle
 import gym
-import numpy as np
 import argparse
 import wimblepong
-from PIL import Image
 from DQN_SAA.DQN_SAA import *
 from utils import *
 import pickle
