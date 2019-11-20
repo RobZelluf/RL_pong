@@ -79,7 +79,7 @@ for i in range(start_episode, episodes):
         next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
 
-        player.store_transition(state_diff, action1, next_state_diff, rew1, done)
+        player.store_transition(state_diff, action1, next_state_diff, rew1, done, actions)
 
         state_diff = next_state_diff
         state = next_state

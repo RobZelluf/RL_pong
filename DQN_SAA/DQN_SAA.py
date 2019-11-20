@@ -146,9 +146,9 @@ class DQN_SAA(object):
     def update_target_network(self):
         self.target_net.load_state_dict(self.policy_net.state_dict())
 
-    def store_transition(self, state, action, next_state, reward, done):
+    def store_transition(self, state, action, next_state, reward, done, actions):
         action = torch.Tensor([[action]]).long()
         reward = torch.tensor([reward], dtype=torch.float32)
         next_state = torch.from_numpy(next_state).float()
         state = torch.from_numpy(state).float()
-        self.memory.push(state, action, next_state, reward, done)
+        self.memory.push(state, action, next_state, reward, done, actions)

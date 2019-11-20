@@ -64,8 +64,8 @@ class DDQN_SAA(object):
         self.chosen_actions = np.zeros(self.action_space)
 
         if load:
-            self.network1 = torch.load("DDQN_SAA/policy_net.pth")
-            self.network2 = torch.load("DDQN_SAA/target_net.pth")
+            self.network1 = torch.load("DDQN_SAA/network1.pth")
+            self.network2 = torch.load("DDQN_SAA/network2.pth")
             print("Policy and target loaded!")
         else:
             self.network1 = Q_CNN(self.state_space, self.action_space, size)

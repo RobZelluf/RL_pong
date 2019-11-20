@@ -10,7 +10,7 @@ import cv2
 
 
 Transition = namedtuple('Transition',
-                        ('state', 'action', 'next_state', 'reward', 'done'))
+                        ('state', 'action', 'next_state', 'reward', 'done', 'actions'))
 
 
 class ReplayMemory(object):
@@ -27,7 +27,10 @@ class ReplayMemory(object):
         self.position = (self.position + 1) % self.capacity
 
     def sample(self, batch_size):
-        return random.sample(self.memory, batch_size)
+        p = list(np.array([x.actions for x in self.memory]) + 50)
+        p /= np.sum(p)
+        mask = np.random.choice(len(self.memory), batch_size, replace=False, p=p)
+        return [self.memory[i] for i in mask]
 
     def __len__(self):
         return len(self.memory)
