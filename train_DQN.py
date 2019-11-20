@@ -39,8 +39,8 @@ player = DQN_SAA(env, player_id)
 start_episode = 0
 
 if args.load:
-    player.target_net = torch.load("DQN_SAA/target_net.pth")
     player.policy_net = torch.load("DQN_SAA/policy_net.pth")
+    player.update_target_network()
     with open("DQN_SAA/model_info.p", "rb") as f:
         start_episode = pickle.load(f)
 
@@ -94,17 +94,16 @@ for i in range(start_episode, episodes):
 
             if i % 20 == 0:
                 player.update_target_network()
+                print("Target network updated!")
 
             observation = env.reset()
             cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
-            print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1]))
-            print("Epsilon: {:.3f}".format(eps))
+            print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1], eps))
 
 
     if i % 100 == 0 and args.save:
         torch.save(player.policy_net, "DQN_SAA/policy_net.pth")
-        torch.save(player.target_net, "DQN_SAA/target_net.pth")
         with open("DQN_SAA/model_info.p", "wb") as f:
             pickle.dump(i, f)
 
