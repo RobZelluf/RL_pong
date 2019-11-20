@@ -9,26 +9,28 @@ from utils import Transition, ReplayMemory
 
 
 class Q_CNN(nn.Module):
-    def __init__(self, state_space, action_space):
+    def __init__(self, state_space, action_space, size):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
+        self.linear_size = int(((size - 8) / 2)**2 * 8)
 
-        self.conv1 = nn.Conv2d(1, 8, 8, 4)
+        self.conv1 = nn.Conv2d(1, 4, 4, 2)
+        self.conv2 = nn.Conv2d(4, 8, 4, 1)
         self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = torch.nn.Linear(8 * 24 * 24, 64)
+        self.fc1 = torch.nn.Linear(self.linear_size, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
         # Computes the activation of the first convolution
         # Size changes from (3, 32, 32) to (18, 32, 32)
         x = F.relu(self.conv1(x))
-        x = self.pool(x)
+        x = F.relu(self.conv2(x))
 
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 8 * 24 * 24)
+        x = x.view(-1, self.linear_size)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
@@ -36,12 +38,12 @@ class Q_CNN(nn.Module):
 
         # Computes the second fully connected layer (activation applied later)
         # Size changes from (1, 64) to (1, 10)
-        x = F.softmax(self.fc2(x))
+        x = self.fc2(x)
         return x
 
 
 class DDQN_SAA(object):
-    def __init__(self, env, player_id=1, replay_buffer_size=100000, batch_size=256, gamma=0.98):
+    def __init__(self, env, player_id=1, load=False, replay_buffer_size=50000, batch_size=256, gamma=0.98, size=200):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
@@ -49,6 +51,7 @@ class DDQN_SAA(object):
         self.player_id = player_id
         self.name = "SAA"
         self.gamma = gamma
+        self.size = size
 
         if torch.cuda.is_available():
             print("Using GPU!")
@@ -58,9 +61,15 @@ class DDQN_SAA(object):
         self.action_space = env.action_space.n
         self.memory = ReplayMemory(replay_buffer_size)
         self.batch_size = batch_size
+        self.chosen_actions = np.zeros(self.action_space)
 
-        self.network1 = Q_CNN(self.state_space, self.action_space)
-        self.network2 = Q_CNN(self.state_space, self.action_space)
+        if load:
+            self.network1 = torch.load("DDQN_SAA/policy_net.pth")
+            self.network2 = torch.load("DDQN_SAA/target_net.pth")
+            print("Policy and target loaded!")
+        else:
+            self.network1 = Q_CNN(self.state_space, self.action_space, size)
+            self.network2 = Q_CNN(self.state_space, self.action_space, size)
 
         self.optimizer1 = optim.RMSprop(self.network1.parameters(), lr=1e-3)
         self.optimizer2 = optim.RMSprop(self.network2.parameters(), lr=1e-3)
@@ -84,14 +93,12 @@ class DDQN_SAA(object):
         non_final_mask = 1 - torch.tensor(batch.done, dtype=torch.uint8)
         non_final_next_states = [s for nonfinal, s in zip(non_final_mask,
                                                           batch.next_state) if nonfinal > 0]
-
         non_final_next_states = torch.stack(non_final_next_states)
         state_batch = torch.stack(batch.state)
         action_batch = torch.cat(batch.action)
         reward_batch = torch.cat(batch.reward)
 
-        sample = random.random()
-        if sample > 0.5:
+        if random.random() < 0.5:
             state_action_values = self.network1(state_batch).gather(1, action_batch)
 
             next_state_values = torch.zeros(self.batch_size)
@@ -122,7 +129,7 @@ class DDQN_SAA(object):
                                     expected_state_action_values)
 
             # Optimize the model
-            self.optimizer2.zero_grad()
+            self.optimizer1.zero_grad()
             loss.backward()
             for param in self.network2.parameters():
                 param.grad.data.clamp_(-1e-1, 1e-1)
@@ -135,12 +142,16 @@ class DDQN_SAA(object):
         sample = random.random()
         if sample > epsilon:
             with torch.no_grad():
-                state = state.reshape(1, 1, 200, 200)
+                state = state.reshape(1, 1, self.size, self.size)
                 state = torch.from_numpy(state).float()
                 q_values = self.network1(state)
-                return torch.argmax(q_values).item()
+                action = torch.argmax(q_values).item()
+                self.chosen_actions[action] += 1
+
+                return action
         else:
             return random.randrange(self.action_space)
+
 
     def store_transition(self, state, action, next_state, reward, done):
         action = torch.Tensor([[action]]).long()

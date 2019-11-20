@@ -35,13 +35,13 @@ episodes = 500000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = DDQN_SAA(env, player_id)
+player = DDQN_SAA(env, player_id, size=120)
 start_episode = 0
 
 if args.load:
     player.network1 = torch.load("DDQN_SAA/network1.pth")
     player.network2 = torch.load("DDQN_SAA/network2.pth")
-    with open("DQN_SAA2/model_info.p", "rb") as f:
+    with open("DDQN_SAA/model_info.p", "rb") as f:
         start_episode = pickle.load(f)
 
 glie_a = args.glie_a
@@ -58,7 +58,7 @@ for i in range(start_episode, episodes):
     eps = max(0.05, eps)
 
     state, _ = env.reset()
-    state = process_state(state)
+    state = process_state(state, player.size)
     state_diff = 2 * state - state
     point = 0
 
@@ -71,7 +71,7 @@ for i in range(start_episode, episodes):
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state = process_state(next_state)
+        next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
