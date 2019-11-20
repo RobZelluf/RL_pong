@@ -9,28 +9,27 @@ from utils import Transition, ReplayMemory
 
 
 class Q_CNN(nn.Module):
-    def __init__(self, state_space, action_space):
+    def __init__(self, state_space, action_space, size):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
+        self.linear_size = int(((size - 4) / 2)**2 * 4)
 
-        self.conv1 = nn.Conv2d(1, 32, 8, 4)
-        self.conv2 = nn.Conv2d(32, 64, 4, 2)
-
+        self.conv1 = nn.Conv2d(1, 4, 4, 1)
         self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = torch.nn.Linear(64 * 23 * 23, 64)
+        self.fc1 = torch.nn.Linear(self.linear_size, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
         # Computes the activation of the first convolution
         # Size changes from (3, 32, 32) to (18, 32, 32)
         x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
+        x = self.pool(x)
 
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 64 * 23 * 23)
+        x = x.view(-1, self.linear_size)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
@@ -43,7 +42,7 @@ class Q_CNN(nn.Module):
 
 
 class DQN_SAA(object):
-    def __init__(self, env, player_id=1, load=False, replay_buffer_size=50000, batch_size=256, gamma=0.98):
+    def __init__(self, env, player_id=1, load=False, replay_buffer_size=50000, batch_size=256, gamma=0.98, size=200):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
@@ -51,6 +50,7 @@ class DQN_SAA(object):
         self.player_id = player_id
         self.name = "SAA"
         self.gamma = gamma
+        self.size = size
 
         if torch.cuda.is_available():
             print("Using GPU!")
@@ -66,9 +66,9 @@ class DQN_SAA(object):
             self.policy_net = torch.load("DQN_SAA/policy_net.pth")
             print("Policy loaded!")
         else:
-            self.policy_net = Q_CNN(self.state_space, self.action_space)
+            self.policy_net = Q_CNN(self.state_space, self.action_space, size)
 
-        self.target_net = Q_CNN(self.state_space, self.action_space)
+        self.target_net = Q_CNN(self.state_space, self.action_space, size)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
 
@@ -132,7 +132,7 @@ class DQN_SAA(object):
         sample = random.random()
         if sample > epsilon:
             with torch.no_grad():
-                state = state.reshape(1, 1, 200, 200)
+                state = state.reshape(1, 1, self.size, self.size)
                 state = torch.from_numpy(state).float()
                 q_values = self.policy_net(state)
                 action = torch.argmax(q_values).item()
