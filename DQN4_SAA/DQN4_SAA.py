@@ -13,7 +13,7 @@ class Q_CNN(nn.Module):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
-        self.linear_size = int(32 * 46 * 46)
+        self.linear_size = int(32 * 26 * 26)
 
         self.conv1 = nn.Conv2d(4, 16, 8, 4)
         self.conv2 = nn.Conv2d(16, 32, 4, 1)
@@ -118,7 +118,7 @@ class DQN4_SAA(object):
 
     def get_action(self, state, epsilon=0.05):
         sample = random.random()
-        if sample > epsilon:
+        if sample > epsilon and state is not None:
             with torch.no_grad():
                 state = state.reshape(1, 4, self.size, self.size)
                 state = torch.from_numpy(state).float()
