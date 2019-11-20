@@ -30,7 +30,7 @@ class Q_CNN(nn.Module):
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, self.linear_size)
+        x = x.view(-1, self.fc1.in_features)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
