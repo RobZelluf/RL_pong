@@ -29,6 +29,8 @@ args = parser.parse_args()
 
 if args.save:
     model_name = input("Model name/number:")
+    if not os.path.exists("DQN_SAA/" + model_name):
+        os.mkdir("DQN_SAA/" + model_name)
 
 # Make the environment
 env = gym.make("WimblepongVisualMultiplayer-v0")
@@ -131,8 +133,8 @@ for i in range(start_episode, episodes):
         print("Action distribution:", list(chosen_actions))
 
         if args.save:
-            torch.save(player.policy_net, "DQN_SAA/policy_net.pth")
-            with open("DQN_SAA/model_info.p", "wb") as f:
+            torch.save(player.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
+            with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
                 pickle.dump(i, f)
 
             print("Models saved!")
