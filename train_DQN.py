@@ -17,7 +17,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--headless", action="store_true", help="Run in headless mode")
 parser.add_argument("--save", action="store_true")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
 parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=500)
@@ -125,7 +124,7 @@ for i in range(start_episode, episodes):
             observation = env.reset()
             print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions[-1], eps))
 
-    if i % 5 == 0:
+    if i % 100 == 0:
         chosen_actions = player.chosen_actions
         if np.sum(chosen_actions) != 0:
             chosen_actions /= np.sum(chosen_actions)
