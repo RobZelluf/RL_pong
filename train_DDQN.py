@@ -41,8 +41,8 @@ start_episode = 0
 if args.load:
     player.network1 = torch.load("DDQN_SAA/network1.pth")
     player.network2 = torch.load("DDQN_SAA/network2.pth")
-    with open("DDQN_SAA/model_info.p", "rb") as f:
-        start_episode = pickle.load(f)
+    # with open("DDQN_SAA/model_info.p", "rb") as f:
+    #     start_episode = pickle.load(f)
 
 glie_a = args.glie_a
 
