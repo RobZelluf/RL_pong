@@ -11,6 +11,7 @@ import wimblepong
 from DQN_SAA.DQN_SAA import *
 from utils import *
 import pickle
+import os
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -20,10 +21,14 @@ parser.add_argument("--headless", action="store_true", help="Run in headless mod
 parser.add_argument("--save", action="store_true")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
 parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=500)
+parser.add_argument("--size", type=int, default=200)
 parser.add_argument("--target_update", type=int, default=10)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
 parser.add_argument("--load", action="store_true")
 args = parser.parse_args()
+
+if args.save:
+    model_name = input("Model name/number:")
 
 # Make the environment
 env = gym.make("WimblepongVisualMultiplayer-v0")
@@ -36,13 +41,24 @@ episodes = 500000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = DQN_SAA(env, player_id, size=80)
+player = DQN_SAA(env, player_id, size=args.size)
 start_episode = 0
 
 if args.load:
-    player.policy_net = torch.load("DQN_SAA/policy_net.pth")
+    if not args.save:
+        DIRs = [x for x in os.listdir("DQN_SAA/") if os.path.isdir("DQN_SAA/" + x) and "cache" not in x]
+        i = 0
+        for DIR in DIRs:
+            print(i, DIR)
+            i += 1
+
+        print(DIRs)
+        model_ind = int(input("Model number:"))
+        model_name = DIRs[model_ind]
+
+    player.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
     player.update_target_network()
-    with open("DQN_SAA/model_info.p", "rb") as f:
+    with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
         start_episode = pickle.load(f)
 
 glie_a = args.glie_a
@@ -69,9 +85,7 @@ for i in range(start_episode, episodes):
     state_diff = 2 * state - state
     point = 0
 
-    actions = 0
     while not done:
-        actions += 1
         # Get the actions from both SimpleAIs
         action1 = player.get_action(state_diff, eps)
         action2 = opponent.get_action()
@@ -81,7 +95,10 @@ for i in range(start_episode, episodes):
         next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
 
-        player.store_transition(state_diff, action1, next_state_diff, rew1, done, actions)
+        plt.imshow(next_state_diff.reshape(200, 200))
+        plt.show()
+
+        player.store_transition(state_diff, action1, next_state_diff, rew1, done)
 
         state_diff = next_state_diff
         state = next_state

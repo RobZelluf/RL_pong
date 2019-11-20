@@ -30,7 +30,7 @@ episodes = 100000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = DQN_SAA(env, player_id, load=True, size=80)
+player = DQN_SAA(env, player_id, load=True, size=100)
 
 # Set the names for both SimpleAIs
 env.set_names(player.get_name(), opponent.get_name())

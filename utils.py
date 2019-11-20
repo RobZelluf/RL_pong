@@ -10,7 +10,7 @@ import cv2
 
 
 Transition = namedtuple('Transition',
-                        ('state', 'action', 'next_state', 'reward', 'done', 'actions'))
+                        ('state', 'action', 'next_state', 'reward', 'done'))
 
 
 class ReplayMemory(object):
@@ -72,7 +72,8 @@ def process_state(state, size):
     mask = np.all(state == [43, 48, 58], axis=-1)
     state[mask] = [0, 0, 0]
     state = np.mean(state, axis=-1)
-    state = cv2.resize(state, (size, size))
+    if size < 200:
+        state = cv2.resize(state, (size, size))
     state = state.astype(int)
     state = state.reshape((1, size, size))
     return state
