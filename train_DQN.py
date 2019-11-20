@@ -43,8 +43,6 @@ episodes = 500000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = DQN_SAA(env, player_id, size=args.size)
-start_episode = 0
 
 if args.load:
     if not args.save:
@@ -54,14 +52,17 @@ if args.load:
             print(i, DIR)
             i += 1
 
-        print(DIRs)
         model_ind = int(input("Model number:"))
         model_name = DIRs[model_ind]
 
-    player.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
-    player.update_target_network()
     with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
-        start_episode = pickle.load(f)
+        model_info = pickle.load(f)
+        start_episode = model_info["episode"]
+
+    player = DQN_SAA(env, player_id, model_info=model_info)
+else:
+    player = DQN_SAA(env, player_id, size=args.size)
+    start_episode = 0
 
 glie_a = args.glie_a
 target_update = args.target_update
@@ -124,7 +125,7 @@ for i in range(start_episode, episodes):
             observation = env.reset()
             print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions[-1], eps))
 
-    if i % 100 == 0:
+    if i % 5 == 0:
         chosen_actions = player.chosen_actions
         if np.sum(chosen_actions) != 0:
             chosen_actions /= np.sum(chosen_actions)
@@ -134,7 +135,16 @@ for i in range(start_episode, episodes):
 
         if args.save:
             torch.save(player.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
+            model_info = dict()
+            model_info["model_name"] = model_name
+            model_info["size"] = player.size
+            model_info["episode"] = i
+
             with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
-                pickle.dump(i, f)
+                pickle.dump(model_info, f)
 
             print("Models saved!")
+
+            with open("DQN_SAA/" + model_name + "/performance.txt", "a") as f:
+                f.write("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions[-1], eps))
+                f.write("\n")
