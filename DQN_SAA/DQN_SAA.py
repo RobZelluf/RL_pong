@@ -65,6 +65,7 @@ class DQN_SAA(object):
 
         if model_info is not None:
             self.policy_net = torch.load("DQN_SAA/" + model_info["model_name"] + "/policy_net.pth")
+            self.size = model_info["size"]
             print("Policy loaded!")
         else:
             self.policy_net = Q_CNN(self.state_space, self.action_space, size)
