@@ -54,8 +54,11 @@ cumulative_rewards = [0]
 RA_actions = [0]
 for i in range(start_episode, episodes):
     done = False
-    eps = glie_a / (glie_a + i)
-    eps = max(0.05, eps)
+    if glie_a <= 0:
+        eps = 0
+    else:
+        eps = glie_a / (glie_a + i)
+        eps = max(0.05, eps)
 
     state, _ = env.reset()
     state = process_state(state, player.size)
