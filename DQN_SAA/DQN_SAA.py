@@ -38,7 +38,7 @@ class Q_CNN(nn.Module):
 
         # Computes the second fully connected layer (activation applied later)
         # Size changes from (1, 64) to (1, 10)
-        x = F.softmax(self.fc2(x))
+        x = self.fc2(x)
         return x
 
 
