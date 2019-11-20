@@ -50,7 +50,9 @@ glie_a = args.glie_a
 env.set_names(player.get_name(), opponent.get_name())
 
 win1 = 0
-cumulative_rewards = [0]
+wins = []
+avg_over = 50
+
 RA_actions = [0]
 for i in range(start_episode, episodes):
     done = False
@@ -89,14 +91,21 @@ for i in range(start_episode, episodes):
         if done:
             player.update_network()
 
+            if rew1 == 10:
+                wins.append(1)
+            else:
+                wins.append(0)
+
+            if len(wins) > avg_over:
+                wins = wins[-avg_over:]
+
             if i % 20 == 0:
                 player.update_target_network()
                 print("Target network updated!")
 
             observation = env.reset()
-            cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
-            print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1], eps))
+            print("episode {} over. Broken WR: {:.3f}. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, win1/(i+1), np.mean(wins), RA_actions[-1], eps))
 
     if i % 100 == 0:
         chosen_actions = player.chosen_actions
