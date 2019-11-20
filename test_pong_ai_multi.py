@@ -45,7 +45,7 @@ for i in range(0,episodes):
 
     while not done:
         # Get the actions from both SimpleAIs
-        action1 = player.get_action(state, 0)
+        action1 = player.get_action(state, 0.1)
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
         (ob1, ob2), (rew1, rew2), done, info = env.step((action1, action2))

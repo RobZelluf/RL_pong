@@ -133,6 +133,9 @@ class DQN_SAA(object):
                 state = state.reshape(1, 1, 200, 200)
                 state = torch.from_numpy(state).float()
                 q_values = self.policy_net(state)
+                if random.random() < 0.01:
+                    print("Q_values:", q_values)
+
                 return torch.argmax(q_values).item()
         else:
             return random.randrange(self.action_space)
