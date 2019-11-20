@@ -71,7 +71,7 @@ class DQN_SAA(object):
 
         self.target_net = self.policy_net
 
-        self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=1e-3)
+        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=1e-3)
 
     def update_network(self, updates=1):
         for _ in range(updates):
@@ -114,7 +114,7 @@ class DQN_SAA(object):
         expected_state_action_values = reward_batch + self.gamma * next_state_values
 
         # Compute Huber loss
-        loss = F.smooth_l1_loss(state_action_values.squeeze(),
+        loss = F.mse_loss(state_action_values.squeeze(),
                                 expected_state_action_values)
 
         # Optimize the model
