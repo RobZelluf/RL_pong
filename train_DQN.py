@@ -55,6 +55,7 @@ RA_actions = [0]
 for i in range(start_episode, episodes):
     done = False
     eps = glie_a / (glie_a + i)
+    eps = max(0.05, eps)
 
     state, _ = env.reset()
     state = process_state(state)
@@ -90,6 +91,10 @@ for i in range(start_episode, episodes):
 
         if done:
             player.update_network()
+
+            if i % 20 == 0:
+                player.update_target_network()
+
             observation = env.reset()
             cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)

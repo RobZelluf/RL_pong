@@ -14,23 +14,23 @@ class Q_CNN(nn.Module):
         self.state_space = state_space
         self.action_space = action_space
 
-        self.conv1 = nn.Conv2d(1, 2, 1, 1)
+        self.conv1 = nn.Conv2d(1, 32, 8, 4)
+        self.conv2 = nn.Conv2d(32, 64, 4, 2)
+
         self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = torch.nn.Linear(100 * 100 * 2, 64)
+        self.fc1 = torch.nn.Linear(64 * 23 * 23, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
         # Computes the activation of the first convolution
         # Size changes from (3, 32, 32) to (18, 32, 32)
         x = F.relu(self.conv1(x))
-
-        # Size changes from (18, 32, 32) to (18, 16, 16)
-        x = self.pool(x)
+        x = F.relu(self.conv2(x))
 
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 100 * 100 * 2)
+        x = x.view(-1, 64 * 23 * 23)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
