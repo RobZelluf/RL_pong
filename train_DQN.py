@@ -44,15 +44,14 @@ opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
 
 if args.load:
-    if not args.save:
-        DIRs = [x for x in os.listdir("DQN_SAA/") if os.path.isdir("DQN_SAA/" + x) and "cache" not in x]
-        i = 0
-        for DIR in DIRs:
-            print(i, DIR)
-            i += 1
+    DIRs = [x for x in os.listdir("DQN_SAA/") if os.path.isdir("DQN_SAA/" + x) and "cache" not in x]
+    i = 0
+    for DIR in DIRs:
+        print(i, DIR)
+        i += 1
 
-        model_ind = int(input("Model number:"))
-        model_name = DIRs[model_ind]
+    model_ind = int(input("Model number:"))
+    model_name = DIRs[model_ind]
 
     with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
         model_info = pickle.load(f)
