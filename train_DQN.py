@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
 parser.add_argument("--save", action="store_true")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
-parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=1000)
+parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=500)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
 parser.add_argument("--load", action="store_true")
 args = parser.parse_args()
@@ -95,9 +95,17 @@ for i in range(start_episode, episodes):
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
             print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1], eps))
 
-    if i % 100 == 0 and args.save:
-        torch.save(player.policy_net, "DQN_SAA/policy_net.pth")
-        with open("DQN_SAA/model_info.p", "wb") as f:
-            pickle.dump(i, f)
+    if i % 100:
+        chosen_actions = player.chosen_actions
+        if np.sum(chosen_actions) != 0:
+            chosen_actions /= np.sum(chosen_actions)
 
-        print("Models saved!")
+        chosen_actions = np.round(chosen_actions, 2)
+        print("Action distribution:", list(chosen_actions))
+
+        if args.save:
+            torch.save(player.policy_net, "DQN_SAA/policy_net.pth")
+            with open("DQN_SAA/model_info.p", "wb") as f:
+                pickle.dump(i, f)
+
+            print("Models saved!")

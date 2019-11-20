@@ -60,6 +60,7 @@ class DQN_SAA(object):
         self.action_space = env.action_space.n
         self.memory = ReplayMemory(replay_buffer_size)
         self.batch_size = batch_size
+        self.chosen_actions = np.zeros(self.action_space)
 
         if load:
             self.policy_net = torch.load("DQN_SAA/policy_net.pth")
@@ -133,10 +134,10 @@ class DQN_SAA(object):
                 state = state.reshape(1, 1, 200, 200)
                 state = torch.from_numpy(state).float()
                 q_values = self.policy_net(state)
-                if random.random() < 0.01:
-                    print("Q_values:", q_values)
+                action = torch.argmax(q_values).item()
+                self.chosen_actions[action] += 1
 
-                return torch.argmax(q_values).item()
+                return action
         else:
             return random.randrange(self.action_space)
 
