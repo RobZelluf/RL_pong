@@ -79,12 +79,6 @@ for i in range(start_episode, episodes):
         state_diff = next_state_diff
         state = next_state
 
-        #img = Image.fromarray(ob1)
-        #img.save("ob1.png")
-        #img = Image.fromarray(ob2)
-        #img.save("ob2.png")
-        # Count the wins
-
         if rew1 == 10:
             win1 += 1
             point = 1
@@ -100,7 +94,6 @@ for i in range(start_episode, episodes):
             cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
             print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1], eps))
-
 
     if i % 100 == 0 and args.save:
         torch.save(player.policy_net, "DQN_SAA/policy_net.pth")

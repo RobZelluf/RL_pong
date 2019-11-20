@@ -91,7 +91,6 @@ for i in range(start_episode, episodes):
             print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1]))
             print("Epsilon: {:.3f}".format(eps))
 
-
     if i % 100 == 0 and args.save:
         torch.save(player.network1, "DDQN_SAA/network1.pth")
         torch.save(player.network2, "DDQN_SAA/network2.pth")

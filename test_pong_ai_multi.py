@@ -11,6 +11,7 @@ import argparse
 import wimblepong
 from PIL import Image
 from DQN_SAA.DQN_SAA import *
+from utils import process_state
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
@@ -39,7 +40,7 @@ for i in range(0,episodes):
     done = False
 
     state, _ = env.reset()
-    state = np.transpose(state)
+    state = process_state(state)
     state_diff = state - state
 
     while not done:
@@ -49,15 +50,10 @@ for i in range(0,episodes):
         # Step the environment and get the rewards and new observations
         (ob1, ob2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state = np.transpose(ob1)
+        next_state = process_state(ob1)
         next_state_diff = next_state - state
         state_diff = next_state_diff
 
-        #img = Image.fromarray(ob1)
-        #img.save("ob1.png")
-        #img = Image.fromarray(ob2)
-        #img.save("ob2.png")
-        # Count the wins
         if rew1 == 10:
             win1 += 1
         if not args.headless:

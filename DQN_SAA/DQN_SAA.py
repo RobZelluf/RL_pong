@@ -62,13 +62,13 @@ class DQN_SAA(object):
         self.batch_size = batch_size
 
         if load:
-            self.target_net = torch.load("models/target_net.pth")
-            self.policy_net = torch.load("models/policy_net.pth")
+            self.policy_net = torch.load("DQN_SAA/policy_net.pth")
         else:
             self.policy_net = Q_CNN(self.state_space, self.action_space)
-            self.target_net = Q_CNN(self.state_space, self.action_space)
-            self.target_net.load_state_dict(self.policy_net.state_dict())
-            self.target_net.eval()
+
+        self.target_net = Q_CNN(self.state_space, self.action_space)
+        self.target_net.load_state_dict(self.policy_net.state_dict())
+        self.target_net.eval()
 
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=1e-3)
 
