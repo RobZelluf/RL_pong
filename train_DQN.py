@@ -26,7 +26,7 @@ parser.add_argument("--scale", type=int, help="Scale of the rendered game", defa
 parser.add_argument("--load", action="store_true")
 args = parser.parse_args()
 
-if args.save:
+if args.save and not args.load:
     model_name = input("Model name/number:")
     if not os.path.exists("DQN_SAA/" + model_name):
         os.mkdir("DQN_SAA/" + model_name)
