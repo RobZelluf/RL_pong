@@ -14,23 +14,21 @@ class Q_CNN(nn.Module):
         self.state_space = state_space
         self.action_space = action_space
 
-        self.conv1 = nn.Conv2d(1, 3, 3, 2, 1)
-        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=1)
-        self.fc1 = torch.nn.Linear(99 * 99 * 3, 64)
+        self.conv1 = nn.Conv2d(1, 8, 8, 4)
+        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = torch.nn.Linear(8 * 24 * 24, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
 
     def forward(self, x):
         # Computes the activation of the first convolution
         # Size changes from (3, 32, 32) to (18, 32, 32)
         x = F.relu(self.conv1(x))
-
-        # Size changes from (18, 32, 32) to (18, 16, 16)
         x = self.pool(x)
 
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
         # Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 99 * 99 * 3)
+        x = x.view(-1, 8 * 24 * 24)
 
         # Computes the activation of the first fully connected layer
         # Size changes from (1, 4608) to (1, 64)
@@ -42,8 +40,8 @@ class Q_CNN(nn.Module):
         return x
 
 
-class DQN_SAA2(object):
-    def __init__(self, env, player_id=1, load=False, replay_buffer_size=10000, batch_size=256, gamma=0.98):
+class DDQN_SAA(object):
+    def __init__(self, env, player_id=1, replay_buffer_size=100000, batch_size=256, gamma=0.98):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
@@ -61,16 +59,11 @@ class DQN_SAA2(object):
         self.memory = ReplayMemory(replay_buffer_size)
         self.batch_size = batch_size
 
-        if load:
-            self.target_net = torch.load("models/target_net.pth")
-            self.policy_net = torch.load("models/policy_net.pth")
-        else:
-            self.policy_net = Q_CNN(self.state_space, self.action_space)
-            self.target_net = Q_CNN(self.state_space, self.action_space)
-            self.target_net.load_state_dict(self.policy_net.state_dict())
-            self.target_net.eval()
+        self.network1 = Q_CNN(self.state_space, self.action_space)
+        self.network2 = Q_CNN(self.state_space, self.action_space)
 
-        self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=1e-3)
+        self.optimizer1 = optim.RMSprop(self.network1.parameters(), lr=1e-3)
+        self.optimizer2 = optim.RMSprop(self.network2.parameters(), lr=1e-3)
 
     def update_network(self, updates=1):
         for _ in range(updates):
@@ -91,37 +84,49 @@ class DQN_SAA2(object):
         non_final_mask = 1 - torch.tensor(batch.done, dtype=torch.uint8)
         non_final_next_states = [s for nonfinal, s in zip(non_final_mask,
                                                           batch.next_state) if nonfinal > 0]
+
         non_final_next_states = torch.stack(non_final_next_states)
         state_batch = torch.stack(batch.state)
         action_batch = torch.cat(batch.action)
         reward_batch = torch.cat(batch.reward)
 
-        # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
-        # columns of actions taken. These are the actions which would've been taken
-        # for each batch state according to policy_net
-        state_action_values = self.policy_net(state_batch).gather(1, action_batch)
+        sample = random.random()
+        if sample > 0.5:
+            state_action_values = self.network1(state_batch).gather(1, action_batch)
 
-        # Compute V(s_{t+1}) for all next states.
-        # Expected values of actions for non_final_next_states are computed based
-        # on the "older" target_net; selecting their best reward with max(1)[0].
-        # This is merged based on the mask, such that we'll have either the expected
-        # state value or 0 in case the state was final.
-        next_state_values = torch.zeros(self.batch_size)
-        next_state_values[non_final_mask] = self.target_net(non_final_next_states).max(1)[0].detach()
+            next_state_values = torch.zeros(self.batch_size)
+            next_state_values[non_final_mask] = self.network2(non_final_next_states).max(1)[0].detach()
 
-        # Task 4: TODO: Compute the expected Q values
-        expected_state_action_values = reward_batch + self.gamma * next_state_values
+            expected_state_action_values = reward_batch + self.gamma * next_state_values
 
-        # Compute Huber loss
-        loss = F.smooth_l1_loss(state_action_values.squeeze(),
-                                expected_state_action_values)
+            # Compute Huber loss
+            loss = F.smooth_l1_loss(state_action_values.squeeze(),
+                                    expected_state_action_values)
 
-        # Optimize the model
-        self.optimizer.zero_grad()
-        loss.backward()
-        for param in self.policy_net.parameters():
-            param.grad.data.clamp_(-1e-1, 1e-1)
-        self.optimizer.step()
+            # Optimize the model
+            self.optimizer1.zero_grad()
+            loss.backward()
+            for param in self.network1.parameters():
+                param.grad.data.clamp_(-1e-1, 1e-1)
+            self.optimizer1.step()
+        else:
+            state_action_values = self.network2(state_batch).gather(1, action_batch)
+
+            next_state_values = torch.zeros(self.batch_size)
+            next_state_values[non_final_mask] = self.network1(non_final_next_states).max(1)[0].detach()
+
+            expected_state_action_values = reward_batch + self.gamma * next_state_values
+
+            # Compute Huber loss
+            loss = F.smooth_l1_loss(state_action_values.squeeze(),
+                                    expected_state_action_values)
+
+            # Optimize the model
+            self.optimizer2.zero_grad()
+            loss.backward()
+            for param in self.network2.parameters():
+                param.grad.data.clamp_(-1e-1, 1e-1)
+            self.optimizer2.step()
 
     def get_name(self):
         return self.name
@@ -132,13 +137,10 @@ class DQN_SAA2(object):
             with torch.no_grad():
                 state = state.reshape(1, 1, 200, 200)
                 state = torch.from_numpy(state).float()
-                q_values = self.policy_net(state)
+                q_values = self.network1(state)
                 return torch.argmax(q_values).item()
         else:
             return random.randrange(self.action_space)
-
-    def update_target_network(self):
-        self.target_net.load_state_dict(self.policy_net.state_dict())
 
     def store_transition(self, state, action, next_state, reward, done):
         action = torch.Tensor([[action]]).long()

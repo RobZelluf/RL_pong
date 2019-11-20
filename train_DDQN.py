@@ -8,7 +8,7 @@ import pickle
 import gym
 import argparse
 import wimblepong
-from DQN_SAA2.DQN_SAA2 import *
+from DDQN_SAA.DDQN_SAA import *
 from utils import *
 import pickle
 
@@ -35,12 +35,12 @@ episodes = 500000
 player_id = 1
 opponent_id = 3 - player_id
 opponent = wimblepong.SimpleAi(env, opponent_id)
-player = DQN_SAA2(env, player_id)
+player = DDQN_SAA(env, player_id)
 start_episode = 0
 
 if args.load:
-    player.target_net = torch.load("DQN_SAA2/target_net.pth")
-    player.policy_net = torch.load("DQN_SAA2/policy_net.pth")
+    player.network1 = torch.load("DDQN_SAA/network1.pth")
+    player.network2 = torch.load("DDQN_SAA/network2.pth")
     with open("DQN_SAA2/model_info.p", "rb") as f:
         start_episode = pickle.load(f)
 
@@ -55,6 +55,7 @@ RA_actions = [0]
 for i in range(start_episode, episodes):
     done = False
     eps = glie_a / (glie_a + i)
+    eps = max(0.05, eps)
 
     state, _ = env.reset()
     state = process_state(state)
@@ -78,12 +79,6 @@ for i in range(start_episode, episodes):
         state_diff = next_state_diff
         state = next_state
 
-        #img = Image.fromarray(ob1)
-        #img.save("ob1.png")
-        #img = Image.fromarray(ob2)
-        #img.save("ob2.png")
-        # Count the wins
-
         if rew1 == 10:
             win1 += 1
             point = 1
@@ -98,9 +93,9 @@ for i in range(start_episode, episodes):
 
 
     if i % 100 == 0 and args.save:
-        torch.save(player.policy_net, "DQN_SAA2/policy_net.pth")
-        torch.save(player.target_net, "DQN_SAA2/target_net.pth")
-        with open("DQN_SAA2/model_info.p", "wb") as f:
+        torch.save(player.network1, "DDQN_SAA/network1.pth")
+        torch.save(player.network2, "DDQN_SAA/network2.pth")
+        with open("DDQN_SAA/model_info.p", "wb") as f:
             pickle.dump(i, f)
 
         print("Models saved!")
