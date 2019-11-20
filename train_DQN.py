@@ -120,7 +120,6 @@ for i in range(start_episode, episodes):
                 print("Target network updated!")
 
             observation = env.reset()
-            RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
             print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions[-1], eps))
 
     if i % 100 == 0:
