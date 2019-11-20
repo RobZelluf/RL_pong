@@ -72,7 +72,7 @@ win1 = 0
 wins = []
 avg_over = 50
 
-RA_actions = [0]
+RA_actions = 0
 for i in range(start_episode, episodes):
     done = False
     if glie_a <= 0:
@@ -84,9 +84,10 @@ for i in range(start_episode, episodes):
     state, _ = env.reset()
     state = process_state(state, player.size)
     state_diff = 2 * state - state
-    point = 0
 
+    actions = 0
     while not done:
+        actions += 1
         # Get the actions from both SimpleAIs
         action1 = player.get_action(state_diff, eps)
         action2 = opponent.get_action()
@@ -103,7 +104,6 @@ for i in range(start_episode, episodes):
 
         if rew1 == 10:
             win1 += 1
-            point = 1
 
         if done:
             player.update_network()
@@ -121,6 +121,7 @@ for i in range(start_episode, episodes):
                 print("Target network updated!")
 
             observation = env.reset()
+            RA_actions = 0.9 * RA_actions + 0.1 * actions
             print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions[-1], eps))
 
     if i % 100 == 0:
