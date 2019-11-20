@@ -13,10 +13,10 @@ class Q_CNN(nn.Module):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
-        self.linear_size = int(((size - 8) / 2)**2 * 8)
+        self.linear_size = int(((size - 8) / 2)**2 * 16)
 
-        self.conv1 = nn.Conv2d(1, 4, 4, 2)
-        self.conv2 = nn.Conv2d(4, 8, 4, 1)
+        self.conv1 = nn.Conv2d(1, 8, 4, 2)
+        self.conv2 = nn.Conv2d(8, 16, 4, 1)
         self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
         self.fc1 = torch.nn.Linear(self.linear_size, 64)
         self.fc2 = torch.nn.Linear(64, action_space)
@@ -69,9 +69,7 @@ class DQN_SAA(object):
         else:
             self.policy_net = Q_CNN(self.state_space, self.action_space, size)
 
-        self.target_net = Q_CNN(self.state_space, self.action_space, size)
-        self.target_net.load_state_dict(self.policy_net.state_dict())
-        self.target_net.eval()
+        self.target_net = self.policy_net
 
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=1e-3)
 
