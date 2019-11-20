@@ -95,7 +95,7 @@ for i in range(start_episode, episodes):
             RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
             print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1], eps))
 
-    if i % 100:
+    if i % 100 == 0:
         chosen_actions = player.chosen_actions
         if np.sum(chosen_actions) != 0:
             chosen_actions /= np.sum(chosen_actions)
