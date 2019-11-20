@@ -98,8 +98,7 @@ class DDQN_SAA(object):
         action_batch = torch.cat(batch.action)
         reward_batch = torch.cat(batch.reward)
 
-        loss1 = self.get_loss1(action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch)
-        loss2 = self.get_loss2(action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch)
+        loss1, loss2 = self.get_losses(action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch)
 
         # Optimize the model
         self.optimizer1.zero_grad()
@@ -115,27 +114,26 @@ class DDQN_SAA(object):
             param.grad.data.clamp_(-1e-1, 1e-1)
         self.optimizer2.step()
 
-    def get_loss2(self, action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch):
-        # Update model 2
-        state_action_values = self.network2(state_batch).gather(1, action_batch)
-        next_state_values = torch.zeros(self.batch_size)
-        next_state_values[non_final_mask] = self.network1(non_final_next_states).max(1)[0].detach()
-        expected_state_action_values = reward_batch + self.gamma * next_state_values
-        # Compute Huber loss
-        loss2 = F.smooth_l1_loss(state_action_values.squeeze(),
-                                 expected_state_action_values)
-        return loss2
-
-    def get_loss1(self, action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch):
+    def get_losses(self, action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch):
         # Update model 1
-        state_action_values = self.network1(state_batch).gather(1, action_batch)
-        next_state_values = torch.zeros(self.batch_size)
-        next_state_values[non_final_mask] = self.network2(non_final_next_states).max(1)[0].detach()
+        state_action_values1 = self.network1(state_batch).gather(1, action_batch)
+        state_action_values2 = self.network2(state_batch).gather(1, action_batch)
+
+        next_state_values1 = torch.zeros(self.batch_size)
+        next_state_values2 = torch.zeros(self.batch_size)
+        next_state_values1[non_final_mask] = self.network1(non_final_next_states).max(1)[0].detach()
+        next_state_values2[non_final_mask] = self.network2(non_final_next_states).max(1)[0].detach()
+        next_state_values = torch.min(next_state_values1, next_state_values2)
+
         expected_state_action_values = reward_batch + self.gamma * next_state_values
         # Compute Huber loss
-        loss1 = F.smooth_l1_loss(state_action_values.squeeze(),
+        loss1 = F.smooth_l1_loss(state_action_values1.squeeze(),
                                  expected_state_action_values)
-        return loss1
+
+        loss2 = F.smooth_l1_loss(state_action_values2.squeeze(),
+                                 expected_state_action_values)
+
+        return loss1, loss2
 
     def get_name(self):
         return self.name
