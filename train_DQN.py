@@ -20,6 +20,7 @@ parser.add_argument("--headless", action="store_true", help="Run in headless mod
 parser.add_argument("--save", action="store_true")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
 parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=500)
+parser.add_argument("--target_update", type=int, default=10)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
 parser.add_argument("--load", action="store_true")
 args = parser.parse_args()
@@ -45,6 +46,7 @@ if args.load:
         start_episode = pickle.load(f)
 
 glie_a = args.glie_a
+target_update = args.target_update
 
 # Set the names for both SimpleAIs
 env.set_names(player.get_name(), opponent.get_name())
@@ -99,7 +101,7 @@ for i in range(start_episode, episodes):
             if len(wins) > avg_over:
                 wins = wins[-avg_over:]
 
-            if i % 20 == 0:
+            if i % target_update == 0:
                 player.update_target_network()
                 print("Target network updated!")
 
