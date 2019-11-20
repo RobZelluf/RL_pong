@@ -141,7 +141,7 @@ for i in range(start_episode, episodes):
             with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
                 pickle.dump(model_info, f)
 
-            print("Models saved!")
+            print("Model", model_name,"saved!")
 
             with open("DQN_SAA/" + model_name + "/performance.txt", "a") as f:
                 f.write("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions[-1], eps))
