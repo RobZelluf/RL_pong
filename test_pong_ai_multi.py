@@ -41,23 +41,30 @@ for i in range(0,episodes):
 
     state, _ = env.reset()
     state = process_state(state)
-    state_diff = state - state
+    state_diff = 2 * state - state
 
+    actions = 0
     while not done:
+        actions += 1
         # Get the actions from both SimpleAIs
-        action1 = player.get_action(state, 0.1)
+        action1 = player.get_action(state_diff, 0)
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
-        (ob1, ob2), (rew1, rew2), done, info = env.step((action1, action2))
+        (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state = process_state(ob1)
-        next_state_diff = next_state - state
+        next_state = process_state(next_state)
+        next_state_diff = 2 * next_state - state
+
+        player.store_transition(state_diff, action1, next_state_diff, rew1, done)
+
         state_diff = next_state_diff
+        state = next_state
+
+        env.render()
 
         if rew1 == 10:
             win1 += 1
-        if not args.headless:
-            env.render()
+            point = 1
+
         if done:
-            observation= env.reset()
-            print("episode {} over. Broken WR: {:.3f}".format(i, win1/(i+1)))
+            env.reset()

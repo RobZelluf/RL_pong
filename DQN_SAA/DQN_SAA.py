@@ -64,6 +64,7 @@ class DQN_SAA(object):
 
         if load:
             self.policy_net = torch.load("DQN_SAA/policy_net.pth")
+            print("Policy loaded!")
         else:
             self.policy_net = Q_CNN(self.state_space, self.action_space)
 
