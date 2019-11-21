@@ -834,3 +834,15 @@ episode 81600 over. RWR: 0.080. RAA: 118.606. Ep: 0.000
 episode 81700 over. RWR: 0.100. RAA: 71.850. Ep: 0.000
 episode 81700 over. RWR: 0.000. RAA: 6.800. Ep: 0.000
 episode 81800 over. RWR: 0.280. RAA: 174.038. Ep: 0.000
+episode 81900 over. RWR: 0.320. RAA: 215.517. Ep: 0.050
+episode 82000 over. RWR: 0.200. RAA: 247.875. Ep: 0.000
+episode 82100 over. RWR: 0.260. RAA: 197.447. Ep: 0.050
+episode 82200 over. RWR: 0.220. RAA: 194.215. Ep: 0.050
+episode 82300 over. RWR: 0.220. RAA: 196.320. Ep: 0.050
+episode 82400 over. RWR: 0.240. RAA: 168.777. Ep: 0.000
+episode 82500 over. RWR: 0.140. RAA: 232.300. Ep: 0.050
+episode 82600 over. RWR: 0.320. RAA: 246.272. Ep: 0.050
+episode 82600 over. RWR: 0.000. RAA: 24.400. Ep: 0.000
+episode 82700 over. RWR: 0.240. RAA: 231.492. Ep: 0.000
+episode 82800 over. RWR: 0.320. RAA: 256.628. Ep: 0.050
+episode 82900 over. RWR: 0.220. RAA: 203.667. Ep: 0.050
