@@ -61,7 +61,7 @@ class DQN_SAA(object):
         self.state_space = env.observation_space
         self.action_space = env.action_space.n
         self.memory = ReplayMemory()
-        self.batch_size = 256
+        self.batch_size = 256 * 2
         self.chosen_actions = np.zeros(self.action_space)
 
         if model_info is not None:
