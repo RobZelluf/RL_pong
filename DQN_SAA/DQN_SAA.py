@@ -13,11 +13,10 @@ class Q_CNN(nn.Module):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
-        self.linear_size = int(((size - 8) / 2)**2 * 16)
+        self.linear_size = int((size - 2)**2 * 8)
 
-        self.conv1 = nn.Conv2d(1, 8, 4, 2)
-        self.conv2 = nn.Conv2d(8, 16, 4, 1)
-        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv1 = nn.Conv2d(1, 4, 2, 1)
+        self.conv2 = nn.Conv2d(4, 8, 2, 1)
         self.fc1 = torch.nn.Linear(self.linear_size, fc1_size)
         self.fc2 = torch.nn.Linear(fc1_size, action_space)
 
