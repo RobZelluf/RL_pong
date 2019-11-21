@@ -67,15 +67,16 @@ else:
     player = DQN_SAA(env, player_id, size=args.size, fc1_size=args.fc1_size)
     start_episode = 0
 
-with open("DQN_SAA/" + model_name + "/model_info.txt", "w") as f:
-    f.write(str(player.policy_net.conv1) + "\n")
-    f.write(str(player.policy_net.conv2) + "\n")
-    f.write(str(player.policy_net.fc1) + "\n")
-    f.write(str(player.policy_net.fc2) + "\n")
-    f.write("Size: " + str(player.size) + "\n")
-    f.write("Gamma: " + str(player.gamma) + "\n")
-    f.write("Batch size: " + str(player.batch_size) + "\n")
-    f.write("Optimizer: " + str(player.optimizer) + "\n")
+if args.save:
+    with open("DQN_SAA/" + model_name + "/model_info.txt", "w") as f:
+        f.write(str(player.policy_net.conv1) + "\n")
+        f.write(str(player.policy_net.conv2) + "\n")
+        f.write(str(player.policy_net.fc1) + "\n")
+        f.write(str(player.policy_net.fc2) + "\n")
+        f.write("Size: " + str(player.size) + "\n")
+        f.write("Gamma: " + str(player.gamma) + "\n")
+        f.write("Batch size: " + str(player.batch_size) + "\n")
+        f.write("Optimizer: " + str(player.optimizer) + "\n")
 
 glie_a = args.glie_a
 target_update = args.target_update
