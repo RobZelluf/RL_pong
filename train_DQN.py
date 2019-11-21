@@ -20,7 +20,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--save", action="store_true")
 parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
 parser.add_argument("--glie_a", type=int, help="GLIE-a value", default=1000)
-parser.add_argument("--size", type=int, default=200)
+parser.add_argument("--size", type=int, default=120)
+parser.add_argument("--fc1_size", type=int, default=64)
 parser.add_argument("--target_update", type=int, default=10)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
 parser.add_argument("--load", action="store_true")
@@ -56,10 +57,14 @@ if args.load:
     with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
         model_info = pickle.load(f)
         start_episode = model_info["episode"]
+        if "fc1_size" in model_info:
+            fc1_size = model_info["fc1_size"]
+        else:
+            fc1_size = 64
 
-    player = DQN_SAA(env, player_id, model_info=model_info)
+    player = DQN_SAA(env, player_id, model_info=model_info, fc1_size=fc1_size)
 else:
-    player = DQN_SAA(env, player_id, size=args.size)
+    player = DQN_SAA(env, player_id, size=args.size, fc1_size=args.fc1_size)
     start_episode = 0
 
 glie_a = args.glie_a
@@ -143,6 +148,7 @@ for i in range(start_episode, episodes):
             model_info["model_name"] = model_name
             model_info["size"] = player.size
             model_info["episode"] = i
+            model_info["fc1_size"] = player.fc1_size
 
             with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
                 pickle.dump(model_info, f)

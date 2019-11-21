@@ -9,7 +9,7 @@ from utils import Transition, ReplayMemory
 
 
 class Q_CNN(nn.Module):
-    def __init__(self, state_space, action_space, size):
+    def __init__(self, state_space, action_space, size, fc1_size=64):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
@@ -18,8 +18,8 @@ class Q_CNN(nn.Module):
         self.conv1 = nn.Conv2d(1, 8, 4, 2)
         self.conv2 = nn.Conv2d(8, 16, 4, 1)
         self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = torch.nn.Linear(self.linear_size, 64)
-        self.fc2 = torch.nn.Linear(64, action_space)
+        self.fc1 = torch.nn.Linear(self.linear_size, fc1_size)
+        self.fc2 = torch.nn.Linear(fc1_size, action_space)
 
     def forward(self, x):
         # Computes the activation of the first convolution
@@ -43,7 +43,7 @@ class Q_CNN(nn.Module):
 
 
 class DQN_SAA(object):
-    def __init__(self, env, player_id=1, size=200, model_info=None):
+    def __init__(self, env, player_id=1, size=200, model_info=None, fc1_size=64):
         if type(env) is not Wimblepong:
             raise TypeError("I'm not a very smart AI. All I can play is Wimblepong.")
 
@@ -52,6 +52,7 @@ class DQN_SAA(object):
         self.name = "SAA"
         self.gamma = 0.98
         self.size = size
+        self.fc1_size = self.fc1_size
 
         if torch.cuda.is_available():
             print("Using GPU!")
@@ -68,7 +69,7 @@ class DQN_SAA(object):
             self.size = model_info["size"]
             print("Policy loaded!")
         else:
-            self.policy_net = Q_CNN(self.state_space, self.action_space, size)
+            self.policy_net = Q_CNN(self.state_space, self.action_space, size, fc1_size=fc1_size)
 
         self.target_net = self.policy_net
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=1e-3)
