@@ -70,12 +70,17 @@ for i in range(0,episodes):
         next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
 
+        plt.figure(1)
+        plt.imshow(next_state_diff.reshape((player.size, player.size)))
+        plt.show(block=False)
+        plt.pause(1 / args.fps)
+
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
 
         state_diff = next_state_diff
         state = next_state
 
-        env.render()
+        # env.render()
 
         if rew1 == 10:
             win1 += 1
