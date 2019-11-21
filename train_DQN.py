@@ -102,7 +102,6 @@ for i in range(start_episode, episodes):
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
-        rew1 /= 10
 
         next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
