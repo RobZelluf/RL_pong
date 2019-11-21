@@ -52,7 +52,7 @@ class DQN_SAA(object):
         self.name = "SAA"
         self.gamma = 0.98
         self.size = size
-        self.fc1_size = self.fc1_size
+        self.fc1_size = fc1_size
 
         if torch.cuda.is_available():
             print("Using GPU!")
