@@ -102,18 +102,19 @@ for i in range(start_episode, episodes):
         action2 = opponent.get_action()
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
-        rew1 /= 10
 
         next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
+
+        if rew1 == 10:
+            win1 += 1
+        else:
+            rew1 = 0.01
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
 
         state_diff = next_state_diff
         state = next_state
-
-        if rew1 > 0:
-            win1 += 1
 
         if done:
             player.update_network()
