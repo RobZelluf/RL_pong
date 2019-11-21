@@ -79,7 +79,11 @@ for i in range(start_episode, episodes):
         eps = 0
     else:
         eps = glie_a / (glie_a + i)
-        eps = max(0.05, eps)
+        if eps < 0.5:
+            if random.random() > 0.5:
+                eps = 0.5
+            else:
+                eps = 0
 
     state, _ = env.reset()
     state = process_state(state, player.size)

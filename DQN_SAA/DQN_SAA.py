@@ -121,7 +121,7 @@ class DQN_SAA(object):
         sample = random.random()
         if sample > epsilon:
             with torch.no_grad():
-                state = state.reshape(1, 4, self.size, self.size)
+                state = state.reshape(1, 1, self.size, self.size)
                 state = torch.from_numpy(state).float()
                 q_values = self.policy_net(state)
                 action = torch.argmax(q_values).item()
