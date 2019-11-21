@@ -43,6 +43,9 @@ if args.load:
     player.network2 = torch.load("DDQN_SAA/network2.pth")
     # with open("DDQN_SAA/model_info.p", "rb") as f:
     #     start_episode = pickle.load(f)
+else:
+    player.network1 = torch.load("DQN_SAA/model0_size120_2LCNN/policy_net.pth")
+    player.network2 = player.network1
 
 glie_a = args.glie_a
 
@@ -54,8 +57,11 @@ cumulative_rewards = [0]
 RA_actions = [0]
 for i in range(start_episode, episodes):
     done = False
-    eps = glie_a / (glie_a + i)
-    eps = max(0.05, eps)
+    if glie_a == 0:
+        eps = 0.05
+    else:
+        eps = glie_a / (glie_a + i)
+        eps = max(0.05, eps)
 
     state, _ = env.reset()
     state = process_state(state, player.size)
