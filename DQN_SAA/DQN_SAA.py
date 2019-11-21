@@ -50,7 +50,7 @@ class DQN_SAA(object):
         self.env = env
         self.player_id = player_id
         self.name = "SAA"
-        self.gamma = 0.99
+        self.gamma = 0.95
         self.size = size
         self.fc1_size = fc1_size
 
