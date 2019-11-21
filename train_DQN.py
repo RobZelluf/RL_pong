@@ -108,8 +108,6 @@ for i in range(start_episode, episodes):
 
         if rew1 == 10:
             win1 += 1
-        else:
-            rew1 = 0.01
 
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
 
