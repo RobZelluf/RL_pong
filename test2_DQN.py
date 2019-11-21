@@ -27,11 +27,6 @@ env.unwrapped.fps = args.fps
 # Number of episodes/games to play
 episodes = 100000
 
-# Define the player IDs for both SimpleAI agents
-player_id = 1
-opponent_id = 3 - player_id
-opponent = wimblepong.SimpleAi(env, opponent_id)
-
 DIRs = [x for x in os.listdir("DQN_SAA/") if os.path.isdir("DQN_SAA/" + x) and "cache" not in x]
 i = 0
 for DIR in DIRs:
@@ -45,40 +40,46 @@ with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
     model_info = pickle.load(f)
     start_episode = model_info["episode"]
 
-player = DQN_SAA(env, player_id, model_info=model_info)
+# Define the player IDs for both SimpleAI agents
+player1_id = 1
+player2_id = 3 - player1_id
+
+player1 = DQN_SAA(env, player1_id, model_info=model_info)
+player2 = DQN_SAA(env, player1_id, model_info=model_info)
 
 # Set the names for both SimpleAIs
-env.set_names(player.get_name(), opponent.get_name())
+env.set_names(player1.get_name(), player2.get_name())
 
 win1 = 0
 for i in range(0,episodes):
     done = False
 
-    state, _ = env.reset()
-    state = process_state(state, player.size)
-    state_diff = 2 * state - state
+    state1, state2 = env.reset()
+
+    state1 = process_state(state1, player1.size)
+    state2 = process_state(state2, player2.size)
+    state_diff1 = 2 * state1 - state1
+    state_diff2 = 2 * state2 - state2
 
     actions = 0
     while not done:
         actions += 1
         # Get the actions from both SimpleAIs
-        action1 = player.get_action(state_diff, 0)
-        action2 = opponent.get_action()
+        action1 = player1.get_action(state_diff1, 0)
+        action2 = player2.get_action(state_diff2, 0)
         # Step the environment and get the rewards and new observations
-        (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
+        (next_state1, next_state2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state = process_state(next_state, player.size)
-        next_state_diff = 2 * next_state - state
+        next_state1 = process_state(next_state1, player1.size)
+        next_state2 = process_state(next_state2, player2.size)
 
-        # plt.figure(1)
-        # plt.imshow(next_state_diff.reshape((player.size, player.size)))
-        # plt.show(block=False)
-        # plt.pause(1 / args.fps)
+        next_state_diff1 = 2 * next_state1 - state1
+        next_state_diff2 = 2 * next_state2 - state2
 
-        player.store_transition(state_diff, action1, next_state_diff, rew1, done)
-
-        state_diff = next_state_diff
-        state = next_state
+        state_diff1 = next_state_diff1
+        state_diff2 = next_state_diff2
+        state1 = next_state1
+        state2 = next_state2
 
         env.render()
 

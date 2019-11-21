@@ -74,6 +74,16 @@ for i in range(1, episodes):
         # Step the environment and get the rewards and new observations
         (next_state1, next_state2), (rew1, rew2), done, info = env.step((action1, action2))
 
+        if rew1 == 10:
+            rew1 /= 10
+        else:
+            rew1 = 0.05
+
+        if rew2 == 10:
+            rew2 /= 10
+        else:
+            rew2 = 0.05
+
         next_state1 = process_state(next_state1, player1.size)
         next_state2 = process_state(next_state2, player2.size)
 
@@ -88,14 +98,14 @@ for i in range(1, episodes):
         state1 = next_state1
         state2 = next_state2
 
-        if rew1 == 10:
+        if rew1 == 1:
             win1 += 1
 
         if done:
             player1.update_network()
             player2.update_network()
 
-            if rew1 == 10:
+            if rew1 == 1:
                 wins.append(1)
             else:
                 wins.append(0)
