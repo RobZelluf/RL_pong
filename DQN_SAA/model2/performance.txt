@@ -1,0 +1,12 @@
+episode 0 over. RWR: 0.000. RAA: 3.500. Ep: 1.000
+episode 100 over. RWR: 0.000. RAA: 55.935. Ep: 0.909
+episode 200 over. RWR: 0.060. RAA: 46.792. Ep: 0.833
+episode 300 over. RWR: 0.000. RAA: 41.606. Ep: 0.769
+episode 400 over. RWR: 0.000. RAA: 40.789. Ep: 0.714
+episode 500 over. RWR: 0.000. RAA: 41.515. Ep: 0.667
+episode 600 over. RWR: 0.020. RAA: 48.427. Ep: 0.625
+episode 700 over. RWR: 0.040. RAA: 42.782. Ep: 0.588
+episode 800 over. RWR: 0.020. RAA: 46.072. Ep: 0.556
+episode 900 over. RWR: 0.060. RAA: 43.484. Ep: 0.526
+episode 1000 over. RWR: 0.020. RAA: 50.201. Ep: 0.500
+episode 1100 over. RWR: 0.040. RAA: 39.056. Ep: 0.000
