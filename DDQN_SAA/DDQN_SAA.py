@@ -60,7 +60,7 @@ class DDQN_SAA(object):
         self.state_space = env.observation_space
         self.action_space = env.action_space.n
         self.memory = ReplayMemory()
-        self.batch_size = 256
+        self.batch_size = 256 * 2
         self.chosen_actions = np.zeros(self.action_space)
 
         self.network1 = Q_CNN(self.state_space, self.action_space, size, fc1_size=fc1_size)
@@ -110,19 +110,18 @@ class DDQN_SAA(object):
         self.optimizer2.step()
 
     def compute_losses(self, action_batch, non_final_mask, non_final_next_states, reward_batch, state_batch):
-        state_action_values = self.network1(state_batch).gather(1, action_batch)
-        next_state_values = torch.zeros(self.batch_size)
-        next_state_values[non_final_mask] = self.network2(non_final_next_states).max(1)[0].detach()
-        expected_state_action_values = reward_batch + self.gamma * next_state_values
-        loss1 = F.mse_loss(state_action_values.squeeze(),
-                          expected_state_action_values)
+        state_action_values1 = self.network1(state_batch).gather(1, action_batch)
+        state_action_values2 = self.network2(state_batch).gather(1, action_batch)
 
-        state_action_values = self.network2(state_batch).gather(1, action_batch)
         next_state_values = torch.zeros(self.batch_size)
-        next_state_values[non_final_mask] = self.network1(non_final_next_states).max(1)[0].detach()
+        next_state_values[non_final_mask] = torch.min(
+            self.network2(non_final_next_states).max(1)[0].detach(),
+            self.network2(non_final_next_states).max(1)[0].detach()
+        )
+
         expected_state_action_values = reward_batch + self.gamma * next_state_values
-        loss2 = F.mse_loss(state_action_values.squeeze(),
-                          expected_state_action_values)
+        loss1 = F.mse_loss(state_action_values1.squeeze(), expected_state_action_values)
+        loss2 = F.mse_loss(state_action_values2.squeeze(), expected_state_action_values)
 
         return loss1, loss2
 
