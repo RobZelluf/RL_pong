@@ -53,19 +53,25 @@ glie_a = args.glie_a
 env.set_names(player.get_name(), opponent.get_name())
 
 win1 = 0
-cumulative_rewards = [0]
-RA_actions = [0]
-for i in range(start_episode, episodes):
+wins = []
+avg_over = 50
+
+RA_actions = 0
+for i in range(0, episodes):
     done = False
-    if random.random() > 0.5:
-        eps = 0.05
-    else:
+    if glie_a <= 0:
         eps = 0
+    else:
+        eps = glie_a / (glie_a + i)
+        if eps < 0.05:
+            if random.random() > 0.5:
+                eps = 0.05
+            else:
+                eps = 0
 
     state, _ = env.reset()
     state = process_state(state, player.size)
     state_diff = 2 * state - state
-    point = 0
 
     actions = 0
     while not done:
@@ -79,22 +85,28 @@ for i in range(start_episode, episodes):
         next_state = process_state(next_state, player.size)
         next_state_diff = 2 * next_state - state
 
+        if rew1 == 10:
+            win1 += 1
+
         player.store_transition(state_diff, action1, next_state_diff, rew1, done)
 
         state_diff = next_state_diff
         state = next_state
 
-        if rew1 == 10:
-            win1 += 1
-            point = 1
-
         if done:
             player.update_network()
+
+            if rew1 == 10:
+                wins.append(1)
+            else:
+                wins.append(0)
+
+            if len(wins) > avg_over:
+                wins = wins[-avg_over:]
+
             observation = env.reset()
-            cumulative_rewards.append(0.9 * cumulative_rewards[-1] + 0.1 * point)
-            RA_actions.append(0.9 * RA_actions[-1] + 0.1 * actions)
-            print("episode {} over. Broken WR: {:.3f}. LAR: {:.3f}. RAA: {:.3f}".format(i, win1/(i+1), cumulative_rewards[-1], RA_actions[-1]))
-            print("Epsilon: {:.3f}".format(eps))
+            RA_actions = 0.9 * RA_actions + 0.1 * actions
+            print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions, eps))
 
     if i % 100 == 0:
         chosen_actions = player.chosen_actions
