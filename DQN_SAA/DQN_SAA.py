@@ -71,7 +71,7 @@ class DQN_SAA(object):
             self.policy_net = Q_CNN(self.state_space, self.action_space, size, fc1_size=fc1_size)
 
         self.target_net = self.policy_net
-        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=1e-3)
+        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=1e-4)
 
     def update_network(self, updates=1):
         for _ in range(updates):
