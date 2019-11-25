@@ -16,7 +16,7 @@ class Q_CNN(nn.Module):
         self.linear_size = int((size + 6)**2 * 16)
 
         self.conv1 = nn.Conv2d(1, 8, 4, 2, 1)
-        self.conv2 = nn.Conv2d(16, 8, 4, 1, 1)
+        self.conv2 = nn.Conv2d(8, 16, 4, 1, 1)
         self.fc1 = torch.nn.Linear(self.linear_size, fc1_size)
         self.fc2 = torch.nn.Linear(fc1_size, action_space)
 
