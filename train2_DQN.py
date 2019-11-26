@@ -74,13 +74,6 @@ for i in range(1, episodes):
         # Step the environment and get the rewards and new observations
         (next_state1, next_state2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        if done:
-            rew1 = 0
-            rew2 = 0
-        else:
-            rew1 = 1
-            rew2 = 1
-
         next_state1 = process_state(next_state1, player1.size)
         next_state2 = process_state(next_state2, player2.size)
 
