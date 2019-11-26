@@ -88,14 +88,14 @@ for i in range(1, episodes):
         state1 = next_state1
         state2 = next_state2
 
-        if rew1 == 1:
+        if rew1 == 10:
             win1 += 1
 
         if done:
             player1.update_network()
             player2.update_network()
 
-            if rew1 == 1:
+            if rew1 == 10:
                 wins.append(1)
             else:
                 wins.append(0)
