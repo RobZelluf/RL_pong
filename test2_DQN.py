@@ -45,7 +45,12 @@ player1_id = 1
 player2_id = 3 - player1_id
 
 player1 = DQN_SAA(env, player1_id, model_info=model_info)
-player2 = DQN_SAA(env, player1_id, model_info=model_info)
+player2 = DQN_SAA(env, player2_id, model_info=model_info)
+
+player1.policy_net = torch.load("DQN_SAA/two_agents/policy_net1.pth")
+player1.update_target_network()
+player2.policy_net = torch.load("DQN_SAA/two_agents/policy_net2.pth")
+player2.update_target_network()
 
 # Set the names for both SimpleAIs
 env.set_names(player1.get_name(), player2.get_name())
