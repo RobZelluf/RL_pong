@@ -189,3 +189,9 @@ episode 18700 over. RWR: 0.280. RAA: 271.313. Ep: 0.051
 episode 18800 over. RWR: 0.300. RAA: 236.799. Ep: 0.051
 episode 18900 over. RWR: 0.360. RAA: 333.749. Ep: 0.050
 episode 19000 over. RWR: 0.240. RAA: 220.775. Ep: 0.050
+episode 19100 over. RWR: 0.280. RAA: 345.831. Ep: 0.050
+episode 19100 over. RWR: 1.000. RAA: 21.600. Ep: 0.000
+episode 19200 over. RWR: 0.420. RAA: 319.239. Ep: 0.000
+episode 19300 over. RWR: 0.560. RAA: 332.753. Ep: 0.000
+episode 19400 over. RWR: 0.500. RAA: 413.809. Ep: 0.000
+episode 19400 over. RWR: 1.000. RAA: 19.400. Ep: 0.000
