@@ -1,0 +1,15 @@
+Conv2d(1, 4, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+Conv2d(4, 8, kernel_size=(4, 4), stride=(1, 1), padding=(1, 1))
+Linear(in_features=27848, out_features=64, bias=True)
+Linear(in_features=64, out_features=3, bias=True)
+Size: 120
+Gamma: 0.98
+Batch size: 512
+Optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 0.0001
+    weight_decay: 0
+)
