@@ -38,7 +38,7 @@ episodes = 500000
 player1_id = 1
 player2_id = 3 - player1_id
 
-with open("DQN_SAA/model0_size120_2LCNN/model_info.p", "rb") as f:
+with open("DQN_SAA/small_CNN/model_info.p", "rb") as f:
     model_info = pickle.load(f)
 
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
