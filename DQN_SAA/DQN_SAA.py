@@ -13,10 +13,11 @@ class Q_CNN(nn.Module):
         super(Q_CNN, self).__init__()
         self.state_space = state_space
         self.action_space = action_space
-        self.linear_size = int((size / 2 - 1)**2 * 8)
+        self.linear_size = int((size / 2 - 4)**2 * 8)
 
-        self.conv1 = nn.Conv2d(1, 4, 4, 2, 1)
-        self.conv2 = nn.Conv2d(4, 8, 4, 1, 1)
+        self.conv1 = nn.Conv2d(1, 32, 4, 2)
+        self.conv2 = nn.Conv2d(32, 16, 3, 1)
+        self.conv3 = nn.Conv2d(16, 8, 2, 1)
         self.fc1 = torch.nn.Linear(self.linear_size, fc1_size)
         self.fc2 = torch.nn.Linear(fc1_size, action_space)
 
@@ -25,6 +26,7 @@ class Q_CNN(nn.Module):
         # Size changes from (3, 32, 32) to (18, 32, 32)
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
 
         # Reshape data to input to the input layer of the neural net
         # Size changes from (18, 16, 16) to (1, 4608)
