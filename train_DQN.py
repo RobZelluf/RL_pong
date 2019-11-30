@@ -38,6 +38,7 @@ env.unwrapped.scale = args.scale
 env.unwrapped.fps = args.fps
 # Number of episodes/games to play
 episodes = 500000
+test_episodes = 100
 
 # Define the player IDs for both SimpleAI agents
 player_id = 1
@@ -86,12 +87,13 @@ env.set_names(player.get_name(), opponent.get_name())
 
 win1 = 0
 wins = []
+test_wins = []
 avg_over = 50
 
 RA_actions = 0
 for i in range(start_episode, episodes):
     done = False
-    if glie_a <= 0:
+    if glie_a <= 0 or i % test_episodes == 0:
         eps = 0
     else:
         eps = glie_a / (glie_a + i)
@@ -130,11 +132,18 @@ for i in range(start_episode, episodes):
 
             if rew1 == 10:
                 wins.append(1)
+                if eps == 0:
+                    test_wins.append(1)
             else:
                 wins.append(0)
+                if eps == 0:
+                    test_wins.append(0)
 
             if len(wins) > avg_over:
                 wins = wins[-avg_over:]
+
+            if len(test_wins) > avg_over:
+                test_wins = test_wins[-avg_over:]
 
             if i % target_update == 0:
                 player.update_target_network()
@@ -151,6 +160,7 @@ for i in range(start_episode, episodes):
 
         chosen_actions = np.round(chosen_actions, 2)
         print("Action distribution:", list(chosen_actions))
+        print("Eps 0 wins: {:.2f}".format(np.mean(test_wins)))
 
         if args.save:
             torch.save(player.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
