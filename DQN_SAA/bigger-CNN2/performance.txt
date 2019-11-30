@@ -1,0 +1,2 @@
+episode 0 over. RWR: 0.000. RAA: 1.600. Ep: 1.000
+episode 100 over. RWR: 0.000. RAA: 38.066. Ep: 0.909
