@@ -72,6 +72,11 @@ if args.save:
     with open("DQN_SAA/" + model_name + "/model_info.txt", "w") as f:
         f.write(str(player.policy_net.conv1) + "\n")
         f.write(str(player.policy_net.conv2) + "\n")
+        try:
+            f.write(str(player.policy_net.conv3) + "\n")
+        except:
+            pass
+
         f.write(str(player.policy_net.fc1) + "\n")
         f.write(str(player.policy_net.fc2) + "\n")
         f.write("Size: " + str(player.size) + "\n")
