@@ -158,6 +158,9 @@ for i in range(start_episode, episodes):
             RA_actions = 0.9 * RA_actions + 0.1 * actions
             print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions, eps))
 
+    if i % 10 == 0:
+        print("Memory size", len(player.memory.memory), "out of", player.memory.capacity)
+
     if i % 100 == 0:
         chosen_actions = player.chosen_actions
         if np.sum(chosen_actions) != 0:
