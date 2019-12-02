@@ -39,6 +39,8 @@ env.unwrapped.fps = args.fps
 # Number of episodes/games to play
 episodes = 500000
 test_episodes = 100
+failed = 0
+restart_after_fails = 5
 
 # Define the player IDs for both SimpleAI agents
 player_id = 1
@@ -179,10 +181,16 @@ for i in range(start_episode, episodes):
                 test_WR = np.mean(test_wins)
                 torch.save(player.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
                 print("Model", model_name, "saved!")
+                failed = 0
             else:
                 test_WR = prev_model_info["test_WR"]
                 print("Did not save model: no improvements made!")
+                failed += 1
 
+            if failed >= restart_after_fails:
+                print("Improving model failed", restart_after_fails, "times, resetting to old version!")
+                player.policy_net = torch.load("DQN_SAA/" + prev_model_info["model_name"] + "/policy_net.pth")
+                continue
 
             model_info = dict()
             model_info["model_name"] = model_name
