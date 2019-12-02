@@ -174,7 +174,7 @@ for i in range(start_episode, episodes):
                 with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
                     prev_model_info = pickle.load(f)
                     if "test_WR" in prev_model_info:
-                        if np.mean(test_wins) < prev_model_info["test_WR"]:
+                        if np.mean(test_wins) < prev_model_info["test_WR"] < 1.0:
                             better_model = False
 
             if better_model:
