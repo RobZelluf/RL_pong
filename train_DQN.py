@@ -59,7 +59,7 @@ if args.load:
 
     with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
         model_info = pickle.load(f)
-        start_episode = model_info["episode"]
+        start_episode = model_info["episode"] + 1
         if "fc1_size" in model_info:
             fc1_size = model_info["fc1_size"]
         else:
