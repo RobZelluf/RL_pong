@@ -68,7 +68,7 @@ if args.load:
     player = DQN_SAA(env, player_id, model_info=model_info, fc1_size=fc1_size)
 else:
     player = DQN_SAA(env, player_id, size=args.size, fc1_size=args.fc1_size)
-    start_episode = 0
+    start_episode = 1
 
 if args.save:
     with open("DQN_SAA/" + model_name + "/model_info.txt", "w") as f:
