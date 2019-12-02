@@ -181,6 +181,7 @@ for i in range(start_episode, episodes):
             if better_model:
                 test_WR = np.mean(test_wins)
                 torch.save(player.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
+                print("Model", model_name, "saved!")
             else:
                 test_WR = prev_model_info["test_WR"]
                 print("Did not save model: no improvements made!")
@@ -195,8 +196,6 @@ for i in range(start_episode, episodes):
 
             with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
                 pickle.dump(model_info, f)
-
-            print("Model", model_name,"saved!")
 
             with open("DQN_SAA/" + model_name + "/performance.txt", "a") as f:
                 f.write("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions, eps))
