@@ -171,7 +171,7 @@ for i in range(start_episode, episodes):
 
         if args.save:
             better_model = True
-            if len(test_wins) > 0:
+            if glie_a / (glie_a + i) <= 0.05:
                 with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
                     prev_model_info = pickle.load(f)
                     if "test_WR" in prev_model_info:
