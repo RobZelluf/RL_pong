@@ -185,8 +185,8 @@ for i in range(start_episode, episodes):
                 failed = 0
             else:
                 test_WR = prev_model_info["test_WR"]
-                print("Did not save model: no improvements made!")
                 failed += 1
+                print("Did not save model: no improvements made! Failed", failed, "times...")
 
             if failed >= restart_after_fails:
                 print("Improving model failed", restart_after_fails, "times, resetting to old version!")
