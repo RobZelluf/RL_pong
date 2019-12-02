@@ -167,7 +167,6 @@ for i in range(start_episode, episodes):
 
         chosen_actions = np.round(chosen_actions, 2)
         print("Action distribution:", list(chosen_actions))
-        print("Eps 0 wins: {:.2f}".format(np.mean(test_wins)))
 
         if args.save:
             better_model = True
@@ -182,11 +181,13 @@ for i in range(start_episode, episodes):
                 test_WR = np.mean(test_wins)
                 torch.save(player.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
                 print("Model", model_name, "saved!")
+                print("New test win-rate: {:.2f}".format(test_WR))
                 failed = 0
             else:
                 test_WR = prev_model_info["test_WR"]
                 failed += 1
                 print("Did not save model: no improvements made! Failed", failed, "times...")
+                print("Old test win-rate: {:.2f}".format(test_WR))
 
             if failed >= restart_after_fails:
                 print("Improving model failed", restart_after_fails, "times, resetting to old version!")
