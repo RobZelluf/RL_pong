@@ -138,7 +138,7 @@ for i in range(start_episode, episodes):
         if done:
             player.update_network()
             rewards.append(rew1)
-            with open("DQN_SAA/" + model_name + "/rewards.p", "rb") as f:
+            with open("DQN_SAA/" + model_name + "/rewards.p", "wb") as f:
                 pickle.dump(rewards, f)
 
             if rew1 == 10:
