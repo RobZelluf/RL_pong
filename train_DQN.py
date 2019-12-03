@@ -98,6 +98,7 @@ test_wins = []
 avg_over = 50
 
 RA_actions = 0
+rewards = []
 for i in range(start_episode, episodes):
     done = False
     if glie_a <= 0 or i % test_episodes == 0:
@@ -136,6 +137,9 @@ for i in range(start_episode, episodes):
 
         if done:
             player.update_network()
+            rewards.append(rew1)
+            with open("DQN_SAA/" + model_name + "/rewards.p", "rb") as f:
+                pickle.dump(rewards, f)
 
             if rew1 == 10:
                 wins.append(1)
