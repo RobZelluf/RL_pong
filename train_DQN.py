@@ -138,8 +138,6 @@ for i in range(start_episode, episodes):
         if done:
             player.update_network()
             rewards.append(rew1)
-            with open("DQN_SAA/" + model_name + "/rewards.p", "wb") as f:
-                pickle.dump(rewards, f)
 
             if rew1 == 10:
                 wins.append(1)
@@ -173,6 +171,9 @@ for i in range(start_episode, episodes):
         print("Action distribution:", list(chosen_actions))
 
         if args.save:
+            with open("DQN_SAA/" + model_name + "/rewards.p", "wb") as f:
+                pickle.dump(rewards, f)
+
             better_model = True
             if glie_a / (glie_a + i) <= 0.05:
                 with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
