@@ -48,6 +48,8 @@ else:
 
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
 player2 = DQN_SAA(env, player2_id, model_info=model_info, fc1_size=args.fc1_size)
+player1.memory.capacity /= 2
+player2.memory.capacity /= 2
 
 if model_info["model_name"] is not "two_agents":
     model_info["model_name"] = "two_agents"
@@ -66,7 +68,13 @@ wins2 = []
 avg_over = 50
 
 RA_actions = 0
-rewards = []
+try:
+    with open("DQN_SAA/two_agents/rewards.p", "rb") as f:
+        rewards = pickle.load(f)
+
+except:
+    rewards = []
+
 for i in range(1, episodes):
     done = False
 
