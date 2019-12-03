@@ -49,8 +49,10 @@ else:
 
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
 player2 = DQN_SAA(env, player2_id, model_info=model_info, fc1_size=args.fc1_size)
-player1.memory.capacity /= 2
-player2.memory.capacity /= 2
+
+new_capacity = int(player1.memory.capacity / 2)
+player1.memory.capacity = new_capacity
+player2.memory.capacity = new_capacity
 
 if model_info["model_name"] is not "two_agents":
     model_info["model_name"] = "two_agents"
