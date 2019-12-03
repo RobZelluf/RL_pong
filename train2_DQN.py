@@ -52,6 +52,7 @@ env.set_names(player1.get_name(), player2.get_name())
 
 win1 = 0
 wins = []
+wins2 = []
 avg_over = 50
 
 RA_actions = 0
@@ -103,8 +104,16 @@ for i in range(1, episodes):
             else:
                 wins.append(0)
 
+            if rew2 == 10:
+                wins2.append(1)
+            else:
+                wins2.append(0)
+
             if len(wins) > avg_over:
                 wins = wins[-avg_over:]
+
+            if len(wins2) > avg_over:
+                wins2 = wins2[-avg_over:]
 
             if i % target_update == 0:
                 player1.update_target_network()
@@ -113,7 +122,7 @@ for i in range(1, episodes):
 
             observation = env.reset()
             RA_actions = 0.9 * RA_actions + 0.1 * actions
-            print("episode {} over. RWR: {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), RA_actions))
+            print("episode {} over. RWR1: {:.3f}. RWR2 {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), np.mean(wins2), RA_actions))
 
     if i % 100 == 0:
         chosen_actions = player1.chosen_actions
