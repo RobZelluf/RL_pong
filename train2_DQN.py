@@ -38,15 +38,21 @@ episodes = 500000
 player1_id = 1
 player2_id = 3 - player1_id
 
-with open("DQN_SAA/bigger-CNN/model_info.p", "rb") as f:
-    model_info = pickle.load(f)
+if input("Continue training on 2v2 agent? (y/n)") == "y":
+    with open("DQN_SAA/two_agents/model_info.p", "rb") as f:
+        model_info = pickle.load(f)
+
+else:
+    with open("DQN_SAA/bigger-CNN/model_info.p", "rb") as f:
+        model_info = pickle.load(f)
 
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
 player2 = DQN_SAA(env, player2_id, model_info=model_info, fc1_size=args.fc1_size)
 
-model_info["model_name"] = "two_agents"
-with open("DQN_SAA/two_agents/model_info.p", "wb") as f:
-    pickle.dump(model_info, f)
+if model_info["model_name"] is not "two_agents":
+    model_info["model_name"] = "two_agents"
+    with open("DQN_SAA/two_agents/model_info.p", "wb") as f:
+        pickle.dump(model_info, f)
 
 glie_a = args.glie_a
 target_update = args.target_update
