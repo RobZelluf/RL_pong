@@ -41,6 +41,10 @@ player2_id = 3 - player1_id
 with open("DQN_SAA/bigger-CNN/model_info.p", "rb") as f:
     model_info = pickle.load(f)
 
+model_info["model_name"] = "two_agents"
+with open("DQN_SAA/two_agents/model_info.p", "wb") as f:
+    pickle.dump(model_info, f)
+
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
 player2 = DQN_SAA(env, player2_id, model_info=model_info, fc1_size=args.fc1_size)
 
@@ -136,11 +140,15 @@ for i in range(1, episodes):
             with open("DQN_SAA/two_agents/rewards.p", "wb") as f:
                 pickle.dump(rewards, f)
 
-            torch.save(player1.policy_net, "DQN_SAA/two_agents/policy_net1.pth")
-            torch.save(player1.policy_net, "DQN_SAA/two_agents/policy_net2.pth")
-
-            print("Model saved!")
+            if np.mean(wins) > np.mean(wins2):
+                torch.save(player1.policy_net, "DQN_SAA/two_agents/policy_net.pth")
+                player2.policy_net = player1.policy_net
+                print("Model 1 saved!")
+            else:
+                torch.save(player2.policy_net, "DQN_SAA/two_agents/policy_net.pth")
+                player1.policy_net = player2.policy_net
+                print("Model 2 saved!")
 
             with open("DQN_SAA/two_agents/performance.txt", "a") as f:
-                f.write("episode {} over. RWR: {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), RA_actions))
+                f.write("episode {} over. RWR1: {:.3f}. RWR2 {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), np.mean(wins2), RA_actions))
                 f.write("\n")
