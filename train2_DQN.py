@@ -38,7 +38,7 @@ episodes = 500000
 player1_id = 1
 player2_id = 3 - player1_id
 
-with open("DQN_SAA/small-CNN/model_info.p", "rb") as f:
+with open("DQN_SAA/bigger-CNN/model_info.p", "rb") as f:
     model_info = pickle.load(f)
 
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
@@ -55,6 +55,7 @@ wins = []
 avg_over = 50
 
 RA_actions = 0
+rewards = []
 for i in range(1, episodes):
     done = False
 
@@ -92,6 +93,8 @@ for i in range(1, episodes):
             win1 += 1
 
         if done:
+            rewards.append(rew1)
+
             player1.update_network()
             player2.update_network()
 
@@ -121,6 +124,9 @@ for i in range(1, episodes):
         print("Action distribution:", list(chosen_actions))
 
         if args.save:
+            with open("DQN_SAA/two_agents/rewards.p", "wb") as f:
+                pickle.dump(rewards, f)
+
             torch.save(player1.policy_net, "DQN_SAA/two_agents/policy_net1.pth")
             torch.save(player1.policy_net, "DQN_SAA/two_agents/policy_net2.pth")
 
