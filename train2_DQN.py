@@ -40,6 +40,7 @@ player2_id = 3 - player1_id
 
 if input("Continue training on 2v2 agent? (y/n)") == "y":
     with open("DQN_SAA/two_agents/model_info.p", "rb") as f:
+        print("Continue training 2v2!")
         model_info = pickle.load(f)
 
 else:
