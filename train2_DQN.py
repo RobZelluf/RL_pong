@@ -41,11 +41,6 @@ player2_id = 3 - player1_id
 with open("DQN_SAA/bigger-CNN/model_info.p", "rb") as f:
     model_info = pickle.load(f)
 
-with open("DQN_SAA/two_agents/model_info.p", "wb") as f:
-    pickle.dump(model_info, f)
-
-exit()
-
 player1 = DQN_SAA(env, player1_id, model_info=model_info, fc1_size=args.fc1_size)
 player2 = DQN_SAA(env, player2_id, model_info=model_info, fc1_size=args.fc1_size)
 
