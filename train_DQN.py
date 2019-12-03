@@ -193,6 +193,7 @@ for i in range(start_episode, episodes):
                 print("Improving model failed", restart_after_fails, "times, resetting to old version!")
                 player.policy_net = torch.load("DQN_SAA/" + prev_model_info["model_name"] + "/policy_net.pth")
                 failed = 0
+                test_wins = []
                 continue
 
             model_info = dict()
