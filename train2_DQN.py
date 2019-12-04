@@ -213,5 +213,6 @@ for i in range(1, episodes):
                     print("Model 2 saved!")
             else:
                 print("Game length", RA_actions, "did not pass",  best_RAA, ", using old model!")
+                RA_actions = best_RAA
                 player1.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
                 player2.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
