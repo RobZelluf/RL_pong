@@ -197,10 +197,11 @@ for i in range(1, episodes):
                                                                                       RA_actions))
                 f.write("\n")
 
+
             if RA_actions > best_RAA:
                 best_RAA = RA_actions
                 model_info["best_RAA"] = best_RAA
-                print("Game length increased!")
+                print("Game length increased to", best_RAA)
 
                 if np.mean(wins) > np.mean(wins2):
                     torch.save(player1.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
@@ -211,6 +212,6 @@ for i in range(1, episodes):
                     player1.policy_net = player2.policy_net
                     print("Model 2 saved!")
             else:
-                print("Game length did not increase, using old model!")
+                print("Game length", RA_actions, "did not pass",  best_RAA, ", using old model!")
                 player1.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
                 player2.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
