@@ -91,7 +91,7 @@ if "best_RAA" in model_info:
     best_RAA = model_info["best_RAA"]
 
 try:
-    with open("DQN_SAA/two_agents/rewards.p", "rb") as f:
+    with open("DQN_SAA/" + model_name + "/rewards.p", "rb") as f:
         rewards = pickle.load(f)
 
 except:
@@ -200,7 +200,7 @@ for i in range(1, episodes):
             if RA_actions > best_RAA:
                 best_RAA = RA_actions
                 model_info["best_RAA"] = best_RAA
-                with open("DQN_SAA/two_agents/model_info.p", "wb") as f:
+                with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
                     pickle.dump(model_info, f)
 
                 print("Game length increased to", best_RAA)
