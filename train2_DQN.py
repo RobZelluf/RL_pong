@@ -179,7 +179,7 @@ for i in range(1, episodes):
     if i % 20 == 0:
         print("Model:", model_name)
 
-    if i % 100 == 0:
+    if i % 100 == 0 or RA_actions > best_RAA * 1.1:
         chosen_actions = player1.chosen_actions
         if np.sum(chosen_actions) != 0:
             chosen_actions /= np.sum(chosen_actions)
@@ -196,7 +196,6 @@ for i in range(1, episodes):
                     "episode {} over. RWR1: {:.3f}. RWR2 {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), np.mean(wins2),
                                                                                       RA_actions))
                 f.write("\n")
-
 
             if RA_actions > best_RAA:
                 best_RAA = RA_actions
