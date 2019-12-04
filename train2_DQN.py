@@ -91,9 +91,21 @@ for i in range(1, episodes):
     actions = 0
     while not done:
         actions += 1
+
+        # Calculate epsilons
+        if random.random() < 0.5:
+            eps1 = 0.1
+        else:
+            eps1 = 0
+
+        if random.random() < 0.5:
+            eps2 = 0.1
+        else:
+            eps2 = 0
+
         # Get the actions from both SimpleAIs
-        action1 = player1.get_action(state_diff1)
-        action2 = player2.get_action(state_diff2)
+        action1 = player1.get_action(state_diff1, eps1)
+        action2 = player2.get_action(state_diff2, eps2)
         # Step the environment and get the rewards and new observations
         (next_state1, next_state2), (rew1, rew2), done, info = env.step((action1, action2))
 
