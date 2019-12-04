@@ -1009,3 +1009,16 @@ episode 300 over. RWR1: 0.540. RWR2 0.460. RAA: 276.426.
 episode 400 over. RWR1: 0.560. RWR2 0.440. RAA: 213.933.
 episode 500 over. RWR1: 0.540. RWR2 0.460. RAA: 267.455.
 episode 600 over. RWR1: 0.520. RWR2 0.480. RAA: 205.314.
+episode 700 over. RWR1: 0.560. RWR2 0.440. RAA: 398.679.
+episode 800 over. RWR1: 0.560. RWR2 0.440. RAA: 310.424.
+episode 900 over. RWR1: 0.560. RWR2 0.440. RAA: 182.914.
+episode 1000 over. RWR1: 0.340. RWR2 0.660. RAA: 155.305.
+episode 1100 over. RWR1: 0.520. RWR2 0.480. RAA: 225.511.
+episode 1200 over. RWR1: 0.460. RWR2 0.540. RAA: 197.748.
+episode 1300 over. RWR1: 0.460. RWR2 0.540. RAA: 266.235.
+episode 1400 over. RWR1: 0.480. RWR2 0.520. RAA: 259.981.
+episode 1500 over. RWR1: 0.500. RWR2 0.500. RAA: 240.005.
+episode 1600 over. RWR1: 0.440. RWR2 0.560. RAA: 221.208.
+episode 1700 over. RWR1: 0.440. RWR2 0.560. RAA: 238.788.
+episode 1800 over. RWR1: 0.480. RWR2 0.520. RAA: 286.440.
+episode 1900 over. RWR1: 0.500. RWR2 0.500. RAA: 253.948.

@@ -388,3 +388,49 @@ episode 19400 over. RWR: 0.440. RAA: 289.739. Ep: 0.000
 Test win rate 0.700.
 episode 19600 over. RWR: 0.520. RAA: 373.657. Ep: 0.000 
 Test win rate 0.700.
+episode 19700 over. RWR: 0.600. RAA: 351.329. Ep: 0.000 
+Test win rate 0.700.
+episode 19800 over. RWR: 0.560. RAA: 354.489. Ep: 0.000 
+Test win rate 0.700.
+episode 19900 over. RWR: 0.500. RAA: 326.343. Ep: 0.000 
+Test win rate 0.700.
+episode 20100 over. RWR: 0.540. RAA: 326.263. Ep: 0.000 
+Test win rate 0.700.
+episode 20200 over. RWR: 0.660. RAA: 368.123. Ep: 0.000 
+Test win rate 0.700.
+episode 20300 over. RWR: 0.520. RAA: 428.588. Ep: 0.000 
+Test win rate 0.700.
+episode 20400 over. RWR: 0.680. RAA: 433.080. Ep: 0.000 
+Test win rate 0.700.
+episode 20600 over. RWR: 0.520. RAA: 440.747. Ep: 0.000 
+Test win rate 0.700.
+episode 20700 over. RWR: 0.640. RAA: 398.480. Ep: 0.000 
+Test win rate 0.700.
+episode 20800 over. RWR: 0.520. RAA: 390.998. Ep: 0.000 
+Test win rate 0.700.
+episode 20900 over. RWR: 0.620. RAA: 394.186. Ep: 0.000 
+Test win rate 0.700.
+episode 21100 over. RWR: 0.500. RAA: 449.280. Ep: 0.000 
+Test win rate 0.700.
+episode 21200 over. RWR: 0.500. RAA: 416.075. Ep: 0.000 
+Test win rate 0.700.
+episode 21300 over. RWR: 0.640. RAA: 334.837. Ep: 0.000 
+Test win rate 0.700.
+episode 21400 over. RWR: 0.540. RAA: 451.703. Ep: 0.000 
+Test win rate 0.700.
+episode 21600 over. RWR: 0.500. RAA: 437.429. Ep: 0.000 
+Test win rate 0.700.
+episode 21700 over. RWR: 0.580. RAA: 399.750. Ep: 0.000 
+Test win rate 0.700.
+episode 21800 over. RWR: 0.540. RAA: 417.465. Ep: 0.000 
+Test win rate 0.700.
+episode 21900 over. RWR: 0.600. RAA: 382.896. Ep: 0.000 
+Test win rate 0.700.
+episode 22100 over. RWR: 0.600. RAA: 379.770. Ep: 0.000 
+Test win rate 0.700.
+episode 22200 over. RWR: 0.540. RAA: 346.209. Ep: 0.000 
+Test win rate 0.700.
+episode 22300 over. RWR: 0.580. RAA: 423.288. Ep: 0.000 
+Test win rate 0.700.
+episode 22400 over. RWR: 0.540. RAA: 337.484. Ep: 0.000 
+Test win rate 0.700.
