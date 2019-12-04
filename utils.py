@@ -66,10 +66,14 @@ class DQN(nn.Module):
         return x
 
 
-def process_state(state, size):
+def process_state(state, size, ignore_opponent=False):
     mask = np.all(state == [43, 48, 58], axis=-1)
     state[mask] = [0, 0, 0]
     state = np.mean(state, axis=-1)
+
+    if ignore_opponent:
+        state[:, 180:] = 0
+
     if size < 200:
         state = cv2.resize(state, (size, size))
     state = state.astype(int)
