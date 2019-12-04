@@ -84,8 +84,12 @@ win1 = 0
 wins = []
 wins2 = []
 avg_over = 50
-
 RA_actions = 0
+
+best_RAA = 0
+if "best_RAA" in model_info:
+    best_RAA = model_info["best_RAA"]
+
 try:
     with open("DQN_SAA/two_agents/rewards.p", "rb") as f:
         rewards = pickle.load(f)
@@ -186,15 +190,26 @@ for i in range(1, episodes):
             with open("DQN_SAA/" + model_name + "/rewards.p", "wb") as f:
                 pickle.dump(rewards, f)
 
-            if np.mean(wins) > np.mean(wins2):
-                torch.save(player1.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
-                player2.policy_net = player1.policy_net
-                print("Model 1 saved!")
-            else:
-                torch.save(player2.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
-                player1.policy_net = player2.policy_net
-                print("Model 2 saved!")
-
             with open("DQN_SAA/" + model_name + "/performance.txt", "a") as f:
-                f.write("episode {} over. RWR1: {:.3f}. RWR2 {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), np.mean(wins2), RA_actions))
+                f.write(
+                    "episode {} over. RWR1: {:.3f}. RWR2 {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), np.mean(wins2),
+                                                                                      RA_actions))
                 f.write("\n")
+
+            if RA_actions > best_RAA:
+                best_RAA = RA_actions
+                model_info["best_RAA"] = best_RAA
+                print("Game length increased!")
+
+                if np.mean(wins) > np.mean(wins2):
+                    torch.save(player1.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
+                    player2.policy_net = player1.policy_net
+                    print("Model 1 saved!")
+                else:
+                    torch.save(player2.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
+                    player1.policy_net = player2.policy_net
+                    print("Model 2 saved!")
+            else:
+                print("Game length did not increase, using old model!")
+                player1.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
+                player2.policy_net = torch.load("DQN_SAA/" + model_name + "/policy_net.pth")
