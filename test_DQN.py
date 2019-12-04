@@ -49,6 +49,8 @@ ignore_opponent = False
 if "ignore_opponent" in model_info:
     ignore_opponent = model_info["ignore_opponent"]
 
+print("Ignore opponent:", ignore_opponent)
+
 player = DQN_SAA(env, player_id, model_info=model_info)
 
 # Set the names for both SimpleAIs

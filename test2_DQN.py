@@ -27,22 +27,17 @@ env.unwrapped.fps = args.fps
 # Number of episodes/games to play
 episodes = 100000
 
-if input("Test the 2v2 agent? (y/n)") == "n":
-    DIRs = [x for x in os.listdir("DQN_SAA/") if os.path.isdir("DQN_SAA/" + x) and "cache" not in x]
-    i = 0
-    for DIR in DIRs:
-        print(i, DIR)
-        i += 1
+DIRs = [x for x in os.listdir("DQN_SAA/") if os.path.isdir("DQN_SAA/" + x) and "cache" not in x]
+i = 0
+for DIR in DIRs:
+    print(i, DIR)
+    i += 1
 
-    model_ind = int(input("Model number:"))
-    model_name = DIRs[model_ind]
+model_ind = int(input("Model number:"))
+model_name = DIRs[model_ind]
 
-    with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
-        model_info = pickle.load(f)
-
-else:
-    with open("DQN_SAA/two_agents/model_info.p", "rb") as f:
-        model_info = pickle.load(f)
+with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
+    model_info = pickle.load(f)
 
 start_episode = model_info["episode"]
 
