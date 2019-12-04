@@ -1022,3 +1022,4 @@ episode 1600 over. RWR1: 0.440. RWR2 0.560. RAA: 221.208.
 episode 1700 over. RWR1: 0.440. RWR2 0.560. RAA: 238.788.
 episode 1800 over. RWR1: 0.480. RWR2 0.520. RAA: 286.440.
 episode 1900 over. RWR1: 0.500. RWR2 0.500. RAA: 253.948.
+episode 2000 over. RWR1: 0.580. RWR2 0.420. RAA: 236.290.
