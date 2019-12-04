@@ -200,6 +200,9 @@ for i in range(1, episodes):
             if RA_actions > best_RAA:
                 best_RAA = RA_actions
                 model_info["best_RAA"] = best_RAA
+                with open("DQN_SAA/two_agents/model_info.p", "wb") as f:
+                    pickle.dump(model_info, f)
+
                 print("Game length increased to", best_RAA)
 
                 if np.mean(wins) > np.mean(wins2):
