@@ -46,6 +46,12 @@ else:
 
 start_episode = model_info["episode"]
 
+ignore_opponent = False
+if "ignore_opponent" in model_info:
+    ignore_opponent = model_info["ignore_opponent"]
+
+print("Ignoring opponent:", ignore_opponent)
+
 # Define the player IDs for both SimpleAI agents
 player1_id = 1
 player2_id = 3 - player1_id
@@ -62,8 +68,8 @@ for i in range(0, episodes):
 
     state1, state2 = env.reset()
 
-    state1 = process_state(state1, player1.size)
-    state2 = process_state(state2, player2.size)
+    state1 = process_state(state1, player1.size, ignore_opponent)
+    state2 = process_state(state2, player2.size, ignore_opponent)
     state_diff1 = 2 * state1 - state1
     state_diff2 = 2 * state2 - state2
 
@@ -76,8 +82,8 @@ for i in range(0, episodes):
         # Step the environment and get the rewards and new observations
         (next_state1, next_state2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state1 = process_state(next_state1, player1.size)
-        next_state2 = process_state(next_state2, player2.size)
+        next_state1 = process_state(next_state1, player1.size, ignore_opponent)
+        next_state2 = process_state(next_state2, player2.size, ignore_opponent)
 
         next_state_diff1 = 2 * next_state1 - state1
         next_state_diff2 = 2 * next_state2 - state2

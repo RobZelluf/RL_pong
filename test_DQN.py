@@ -16,7 +16,7 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true", help="Run in headless mode")
-parser.add_argument("--fps", type=int, help="FPS for rendering", default=30)
+parser.add_argument("--fps", type=int, help="FPS for rendering", default=40)
 parser.add_argument("--scale", type=int, help="Scale of the rendered game", default=1)
 args = parser.parse_args()
 
@@ -45,6 +45,10 @@ with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
     model_info = pickle.load(f)
     start_episode = model_info["episode"]
 
+ignore_opponent = False
+if "ignore_opponent" in model_info:
+    ignore_opponent = model_info["ignore_opponent"]
+
 player = DQN_SAA(env, player_id, model_info=model_info)
 
 # Set the names for both SimpleAIs
@@ -55,7 +59,7 @@ for i in range(1, episodes):
     done = False
 
     state, _ = env.reset()
-    state = process_state(state, player.size)
+    state = process_state(state, player.size, ignore_opponent)
     state_diff = 2 * state - state
 
     actions = 0
@@ -67,13 +71,13 @@ for i in range(1, episodes):
         # Step the environment and get the rewards and new observations
         (next_state, ob2), (rew1, rew2), done, info = env.step((action1, action2))
 
-        next_state = process_state(next_state, player.size)
+        next_state = process_state(next_state, player.size, ignore_opponent)
         next_state_diff = 2 * next_state - state
 
         state_diff = next_state_diff
         state = next_state
 
-        #env.render()
+        env.render()
 
         if rew1 == 10:
             win1 += 1
