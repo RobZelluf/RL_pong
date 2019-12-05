@@ -48,7 +48,7 @@ class Q_CNN(nn.Module):
 class Agent(object):
     def __init__(self, player_id=1, size=120, fc1_size=64):
         self.player_id = player_id
-        self.name = "SAA-BIGGER_SNN"
+        self.name = "SAA-IOv2"
         self.size = size
         self.fc1_size = fc1_size
         self.model_info = None
