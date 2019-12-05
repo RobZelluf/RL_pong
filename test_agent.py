@@ -15,7 +15,7 @@ parser.add_argument("--games", "-g", type=int, default=100, help="number of game
 args = parser.parse_args()
 
 sys.path.insert(0, args.dir1)
-import official_test.agent as agent # TODO: Revert!!
+import agent as agent # TODO: Revert!!
 orig_wd = os.getcwd()
 os.chdir(args.dir1)
 agent1 = agent.Agent()

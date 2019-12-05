@@ -48,7 +48,7 @@ class Q_CNN(nn.Module):
 class Agent(object):
     def __init__(self, player_id=1, size=120, fc1_size=64):
         self.player_id = player_id
-        self.name = "SAA"
+        self.name = "SAA-IO"
         self.size = size
         self.fc1_size = fc1_size
         self.model_info = None
@@ -66,8 +66,6 @@ class Agent(object):
         self.policy_net = torch.load("policy_net.pth")
         with open("model_info.p", "rb") as f:
             self.model_info = pickle.load(f)
-
-        print(self.model_info)
 
         self.ignore_opponent = self.model_info["ignore_opponent"]
 
