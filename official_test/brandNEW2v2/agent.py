@@ -53,7 +53,7 @@ class Agent(object):
         self.fc1_size = fc1_size
         self.model_info = None
         self.prev_state = None
-        self.ignore_opponent = None
+        self.ignore_opponent = False
 
         if torch.cuda.is_available():
             print("Using GPU!")
@@ -67,7 +67,8 @@ class Agent(object):
         with open("model_info.p", "rb") as f:
             self.model_info = pickle.load(f)
 
-        self.ignore_opponent = self.model_info["ignore_opponent"]
+        if 'ignore_opponent' in self.model_info:
+            self.ignore_opponent = self.model_info["ignore_opponent"]
 
     def reset(self):
         self.prev_state = None

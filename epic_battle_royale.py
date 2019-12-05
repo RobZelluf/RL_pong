@@ -9,7 +9,7 @@ import importlib
 import numpy as np
 
 parser = argparse.ArgumentParser()
-parser.add_argument("dir", type=str, help="Directory with agents.")
+parser.add_argument("--dir", type=str, help="Directory with agents.")
 parser.add_argument("--render", "-r", action="store_true", help="Render the competition.")
 parser.add_argument("--games", "-g", type=int, default=100, help="Number of games.")
 parser.add_argument("--max_proc", "-p", type=int, default=4, help="Max number of processes.")
