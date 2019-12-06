@@ -96,10 +96,6 @@ wins = []
 avg_over = 50
 RA_actions = 0
 
-best_RAA = 0
-if "best_RAA" in model_info:
-    best_RAA = model_info["best_RAA"]
-
 try:
     with open("DQN_SAA/" + model_name + "/rewards.p", "rb") as f:
         rewards = pickle.load(f)
@@ -191,12 +187,5 @@ for i in range(1, episodes):
                     "episode {} over. RWR1: {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), RA_actions))
                 f.write("\n")
 
-            if RA_actions > best_RAA:
-                best_RAA = RA_actions
-                model_info["best_RAA"] = best_RAA
-                with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
-                    pickle.dump(model_info, f)
-
-                torch.save(player1.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
-                player2.policy_net = player1.policy_net
-                print("Model 1 saved!")
+            torch.save(player1.policy_net, "DQN_SAA/" + model_name + "/policy_net.pth")
+            print("Model 1 saved!")
