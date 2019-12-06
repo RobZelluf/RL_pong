@@ -1,0 +1,3 @@
+official_test/IO-v2
+official_test/ignore-2v2copy
+official_test/ignore_opponent
