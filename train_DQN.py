@@ -190,7 +190,7 @@ for i in range(start_episode, episodes):
                 pickle.dump(rewards, f)
 
             better_model = True
-            if glie_a / (glie_a + i) <= 0.05:
+            if glie_a / (glie_a + i) <= 0.1:
                 with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
                     prev_model_info = pickle.load(f)
                     if "test_WR" in prev_model_info:
