@@ -7,3 +7,7 @@ episode 400 over. RWR1: 0.220. RAA: 384.658.
 episode 500 over. RWR1: 0.340. RAA: 379.380.
 episode 600 over. RWR1: 0.360. RAA: 393.788.
 episode 700 over. RWR1: 0.280. RAA: 514.109.
+episode 800 over. RWR1: 0.420. RAA: 408.834.
+episode 900 over. RWR1: 0.260. RAA: 403.614.
+episode 1000 over. RWR1: 0.340. RAA: 418.454.
+episode 1100 over. RWR1: 0.340. RAA: 421.613.
