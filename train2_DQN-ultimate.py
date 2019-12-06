@@ -188,8 +188,7 @@ for i in range(1, episodes):
 
             with open("DQN_SAA/" + model_name + "/performance.txt", "a") as f:
                 f.write(
-                    "episode {} over. RWR1: {:.3f}. RWR2 {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), np.mean(wins2),
-                                                                                      RA_actions))
+                    "episode {} over. RWR1: {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), RA_actions))
                 f.write("\n")
 
             if RA_actions > best_RAA:
