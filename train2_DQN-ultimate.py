@@ -59,7 +59,7 @@ for DIR in DIRs:
 opponent_ind = int(input("Opponent number:"))
 opponent_name = DIRs[opponent_ind]
 
-with open("DQN_SAA/" + model_name + "/model_info.p", "rb") as f:
+with open("DQN_SAA/" + opponent_name + "/model_info.p", "rb") as f:
     opponent_info = pickle.load(f)
 
 new_model = input("Save as new model? (n/model_name)")
@@ -147,7 +147,6 @@ for i in range(1, episodes):
 
         if done:
             rewards.append(rew1)
-
             player1.update_network()
 
             if eps1 == 0:

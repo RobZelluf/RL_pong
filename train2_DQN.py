@@ -197,8 +197,9 @@ for i in range(1, episodes):
                                                                                       RA_actions))
                 f.write("\n")
 
-            if RA_actions > best_RAA:
-                best_RAA = RA_actions
+            if RA_actions > best_RAA * 0.9:
+                if RA_actions > best_RAA:
+                    best_RAA = RA_actions
                 model_info["best_RAA"] = best_RAA
                 with open("DQN_SAA/" + model_name + "/model_info.p", "wb") as f:
                     pickle.dump(model_info, f)
