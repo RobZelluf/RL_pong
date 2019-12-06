@@ -179,7 +179,7 @@ for i in range(1, episodes):
     if i % 20 == 0:
         print("Model:", model_name)
 
-    if i % 100 == 0 or RA_actions > best_RAA * 1.1:
+    if i % 100 == 0 or RA_actions > best_RAA * 1.04:
         chosen_actions = player1.chosen_actions
         if np.sum(chosen_actions) != 0:
             chosen_actions /= np.sum(chosen_actions)
