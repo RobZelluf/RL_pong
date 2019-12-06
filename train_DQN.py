@@ -176,7 +176,7 @@ for i in range(start_episode, episodes):
     if i % 30 == 0:
         print("Model:", model_name)
 
-    if i % 100 == 0 or (len(test_wins) > 20 and np.mean(test_wins) > model_info["test_WR"] * 1.03):
+    if i % 100 == 0 or (len(test_wins) > 20 and np.mean(test_wins) > model_info["test_WR"] * 1.03 > 0.7):
         print("Model name:", model_name)
         chosen_actions = player.chosen_actions
         if np.sum(chosen_actions) != 0:
