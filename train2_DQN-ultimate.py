@@ -155,6 +155,8 @@ for i in range(1, episodes):
                 else:
                     wins.append(0)
 
+                RA_actions = 0.9 * RA_actions + 0.1 * actions
+
                 if len(wins) > avg_over:
                     wins = wins[-avg_over:]
 
@@ -163,7 +165,6 @@ for i in range(1, episodes):
                 print("Target network updated!")
 
             observation = env.reset()
-            RA_actions = 0.9 * RA_actions + 0.1 * actions
             print("episode {} over. RWR1: {:.3f}. RAA: {:.3f}.".format(i, np.mean(wins), RA_actions))
 
     if i % 20 == 0:
