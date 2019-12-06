@@ -116,9 +116,9 @@ for i in range(start_episode, episodes):
         eps = 0
     else:
         eps = glie_a / (glie_a + i)
-        if eps < 0.05:
+        if eps < 0.1:
             if random.random() > 0.5:
-                eps = 0.05
+                eps = 0.1
             else:
                 eps = 0
 
