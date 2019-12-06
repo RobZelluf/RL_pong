@@ -1,3 +1,2 @@
-1. SAA-IOv3 with 51 wins (winrate 63.75%) (from official_test/IO-v3)
-2. SAA-IO2v2c with 46 wins (winrate 57.50%) (from official_test/ignore-2v2copy)
-3. SAA-IO with 23 wins (winrate 28.75%) (from official_test/ignore_opponent)
+1. SAA-champion with 48 wins (winrate 60.00%) (from official_test/champion)
+2. SAA-champion-2v2 with 32 wins (winrate 40.00%) (from official_test/champion-2v2)
