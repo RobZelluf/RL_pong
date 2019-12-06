@@ -1,0 +1,11 @@
+episode 1 over. RWR1: 0.000. RWR2 1.000. RAA: 61.800.
+episode 3 over. RWR1: 0.000. RWR2 1.000. RAA: 106.268.
+episode 4 over. RWR1: 0.000. RWR2 1.000. RAA: 176.041.
+episode 7 over. RWR1: 0.143. RWR2 0.857. RAA: 211.844.
+episode 10 over. RWR1: 0.300. RWR2 0.700. RAA: 243.599.
+episode 11 over. RWR1: 0.273. RWR2 0.727. RAA: 270.139.
+episode 14 over. RWR1: 0.357. RWR2 0.643. RAA: 328.281.
+episode 15 over. RWR1: 0.333. RWR2 0.667. RAA: 361.453.
+episode 22 over. RWR1: 0.364. RWR2 0.636. RAA: 397.743.
+episode 100 over. RWR1: 0.480. RWR2 0.520. RAA: 345.071.
+episode 111 over. RWR1: 0.460. RWR2 0.540. RAA: 440.864.
