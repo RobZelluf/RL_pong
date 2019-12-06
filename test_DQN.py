@@ -79,7 +79,7 @@ for i in range(1, episodes):
         state_diff = next_state_diff
         state = next_state
 
-        env.render()
+        # env.render()
 
         if rew1 == 10:
             win1 += 1
