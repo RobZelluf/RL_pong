@@ -151,15 +151,17 @@ for i in range(1, episodes):
             player1.update_network()
             player2.update_network()
 
-            if rew1 == 10:
-                wins.append(1)
-            else:
-                wins.append(0)
+            if eps1 == 0:
+                if rew1 == 10:
+                    wins.append(1)
+                else:
+                    wins.append(0)
 
-            if rew2 == 10:
-                wins2.append(1)
-            else:
-                wins2.append(0)
+            if eps2 == 0:
+                if rew2 == 10:
+                    wins2.append(1)
+                else:
+                    wins2.append(0)
 
             if len(wins) > avg_over:
                 wins = wins[-avg_over:]
