@@ -42,6 +42,7 @@ test_episodes = 100
 failed = 0
 restart_after_fails = 5
 ignore_opponent = False
+model_info = dict()
 
 # Define the player IDs for both SimpleAI agents
 player_id = 1
@@ -175,7 +176,7 @@ for i in range(start_episode, episodes):
     if i % 30 == 0:
         print("Model:", model_name)
 
-    if i % 100 == 0:
+    if i % 100 == 0 or (len(test_wins) > 20 and np.mean(test_wins) > model_info["test_WR"] * 1.03):
         print("Model name:", model_name)
         chosen_actions = player.chosen_actions
         if np.sum(chosen_actions) != 0:
@@ -215,7 +216,6 @@ for i in range(start_episode, episodes):
                 test_wins = []
                 continue
 
-            model_info = dict()
             model_info["model_name"] = model_name
             model_info["size"] = player.size
             model_info["episode"] = i
