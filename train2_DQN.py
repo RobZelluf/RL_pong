@@ -84,7 +84,7 @@ win1 = 0
 wins = []
 wins2 = []
 avg_over = 50
-RA_actions = 0
+RA_actions = model_info["best_RAA"]
 
 best_RAA = 0
 if "best_RAA" in model_info:
