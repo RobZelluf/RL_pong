@@ -171,7 +171,7 @@ for i in range(start_episode, episodes):
 
             observation = env.reset()
             RA_actions = 0.9 * RA_actions + 0.1 * actions
-            print("episode {} over. RWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(wins), RA_actions, eps))
+            print("episode {} over. TWR: {:.3f}. RAA: {:.3f}. Ep: {:.3f}".format(i, np.mean(test_wins), RA_actions, eps))
 
     if i % 30 == 0:
         print("Model:", model_name)
