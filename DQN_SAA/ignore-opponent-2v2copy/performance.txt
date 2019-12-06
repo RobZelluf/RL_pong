@@ -181,3 +181,7 @@ episode 27800 over. RWR: 0.440. RAA: 337.347. Ep: 0.000
 Test win rate 0.820.
 episode 28000 over. RWR: 0.660. RAA: 449.062. Ep: 0.000 
 Test win rate 0.820.
+episode 28100 over. RWR: 0.660. RAA: 363.890. Ep: 0.000 
+Test win rate 0.820.
+episode 28200 over. RWR: 0.640. RAA: 368.745. Ep: 0.000 
+Test win rate 0.820.
