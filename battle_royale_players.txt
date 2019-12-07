@@ -1,2 +1,2 @@
-official_test/champion
-official_test/champion-2v2
+official_test/ignore-2v2copy
+official_test/Lasers PEW PEW
