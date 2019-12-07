@@ -5,7 +5,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
-from utils import Transition, ReplayMemory
 import pickle
 import cv2
 
@@ -59,7 +58,6 @@ class Agent(object):
             print("Using GPU!")
             torch.cuda.set_device(0)
 
-        self.memory = ReplayMemory()
         self.batch_size = 256 * 2
 
     def load_model(self):
@@ -96,6 +94,7 @@ class Agent(object):
 
 def get_state_diff(state, prev_state):
     return 2 * state - prev_state
+
 
 def process_state(state, size, ignore_opponent=False):
     mask = np.all(state == [43, 48, 58], axis=-1)

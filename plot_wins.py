@@ -28,6 +28,25 @@ with open("DQN_SAA/" + model_name + "/performance.txt", "r") as f:
             RWR.append(float(rwr))
             RAA.append(float(raa))
 
-plt.plot(TWR)
+plt.figure()
+x = list(range(len(RWR)))
+x = [i * 100 for i in x]
+plt.xlabel("Number  fo episodes")
+plt.ylabel("Average win-rate")
+plt.plot(x, RWR)
+
+plt.figure()
+x = list(range(len(TWR)))
+x = [i * 100 for i in x]
+plt.plot(x, TWR)
+plt.xlabel("Number  fo episodes")
+plt.ylabel("Average win-rate in test-episodes")
+
+plt.figure()
+x = list(range(len(RAA)))
+x = [i * 100 for i in x]
+plt.plot(x, RAA)
+plt.xlabel("Number  fo episodes")
+plt.ylabel("Average episode length (in steps)")
 plt.show()
 
