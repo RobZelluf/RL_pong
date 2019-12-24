@@ -31,22 +31,30 @@ with open("DQN_SAA/" + model_name + "/performance.txt", "r") as f:
 plt.figure()
 x = list(range(len(RWR)))
 x = [i * 100 for i in x]
-plt.xlabel("Number  fo episodes")
+RWR_a = [0]
+for i in range(len(RWR)):
+    RWR_a.append(0.9 * RWR_a[-1] + 0.1 * RWR[i])
+
+RWR_a = RWR_a[1:]
+
+plt.xlabel("Number of episodes")
 plt.ylabel("Average win-rate")
 plt.plot(x, RWR)
-
-plt.figure()
-x = list(range(len(TWR)))
-x = [i * 100 for i in x]
-plt.plot(x, TWR)
-plt.xlabel("Number  fo episodes")
-plt.ylabel("Average win-rate in test-episodes")
+plt.plot(x, RWR_a)
 
 plt.figure()
 x = list(range(len(RAA)))
 x = [i * 100 for i in x]
+
+RAA_a = [0]
+for i in range(len(RAA)):
+    RAA_a.append(0.9 * RAA_a[-1] + 0.1 * RAA[i])
+
+RAA_a = RAA_a[1:]
+
 plt.plot(x, RAA)
-plt.xlabel("Number  fo episodes")
+plt.plot(x, RAA_a)
+plt.xlabel("Number of episodes")
 plt.ylabel("Average episode length (in steps)")
 plt.show()
 

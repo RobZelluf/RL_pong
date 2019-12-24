@@ -5,7 +5,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
-from utils import Transition, ReplayMemory
 import pickle
 import cv2
 
@@ -59,7 +58,6 @@ class Agent(object):
             print("Using GPU!")
             torch.cuda.set_device(0)
 
-        self.memory = ReplayMemory()
         self.batch_size = 256 * 2
 
     def load_model(self):
